@@ -3,10 +3,11 @@ import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import { formatDate } from 'pliny/utils/formatDate'
 import NewsletterForm from 'pliny/ui/NewsletterForm'
+import { type BlogListItem } from '@/lib/posts'
 
 const MAX_DISPLAY = 5
 
-export default function Home({ posts }) {
+export default function Home({ posts }: { posts: BlogListItem[] }) {
   return (
     <>
       <div className="divide-y divide-gray-200 dark:divide-gray-700">

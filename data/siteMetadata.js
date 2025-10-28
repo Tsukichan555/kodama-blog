@@ -1,19 +1,23 @@
 /** @type {import("pliny/config").PlinyConfig } */
 const siteMetadata = {
-  title: 'Next.js Starter Blog',
-  author: 'Tails Azimuth',
-  headerTitle: 'TailwindBlog',
-  description: 'A blog created with Next.js and Tailwind.css',
-  language: 'en-us',
-  theme: 'system', // system, dark or light
-  siteUrl: 'https://tailwind-nextjs-starter-blog.vercel.app',
-  siteRepo: 'https://github.com/timlrx/tailwind-nextjs-starter-blog',
-  siteLogo: `${process.env.BASE_PATH || ''}/static/images/logo.png`,
-  socialBanner: `${process.env.BASE_PATH || ''}/static/images/twitter-card.png`,
+  title: process.env.NEXT_PUBLIC_SITE_TITLE || 'Next.js Starter Blog',
+  author: process.env.NEXT_PUBLIC_SITE_AUTHOR || 'Tails Azimuth',
+  headerTitle: process.env.NEXT_PUBLIC_HEADER_TITLE || 'TailwindBlog',
+  description:
+    process.env.NEXT_PUBLIC_SITE_DESCRIPTION || 'A blog created with Next.js and Tailwind.css',
+  language: process.env.NEXT_PUBLIC_SITE_LANGUAGE || 'en-us',
+  theme: process.env.NEXT_PUBLIC_SITE_THEME || 'dark', // system, dark or light
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'https://tailwind-nextjs-starter-blog.vercel.app',
+  siteRepo:
+    process.env.NEXT_PUBLIC_SITE_REPOSITORY || 'https://github.com/timlrx/tailwind-nextjs-starter-blog',
+  siteLogo:
+    process.env.NEXT_PUBLIC_SITE_LOGO || `${process.env.BASE_PATH || ''}/static/images/logo.png`,
+  socialBanner:
+    process.env.NEXT_PUBLIC_SOCIAL_BANNER || `${process.env.BASE_PATH || ''}/static/images/twitter-card.png`,
   mastodon: 'https://mastodon.social/@mastodonuser',
-  email: 'address@yoursite.com',
-  github: 'https://github.com',
-  x: 'https://twitter.com/x',
+  email: process.env.NEXT_PUBLIC_SITE_EMAIL || 'address@yoursite.com',
+  github: process.env.NEXT_PUBLIC_SITE_GITHUB || 'https://github.com',
+  x: process.env.NEXT_PUBLIC_SITE_TWITTER || 'https://twitter.com/x',
   // twitter: 'https://twitter.com/Twitter',
   facebook: 'https://facebook.com',
   youtube: 'https://youtube.com',
@@ -22,7 +26,7 @@ const siteMetadata = {
   instagram: 'https://www.instagram.com',
   medium: 'https://medium.com',
   bluesky: 'https://bsky.app/',
-  locale: 'en-US',
+  locale: process.env.NEXT_PUBLIC_SITE_LOCALE || 'en-US',
   // set to true if you want a navbar fixed to the top
   stickyNav: false,
   analytics: {
