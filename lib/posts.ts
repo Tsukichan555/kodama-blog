@@ -71,7 +71,11 @@ const buildSummary = (value: string) => {
 const logMicroCMSFallback = (message: string, error: unknown) => {
   if (error instanceof Error) {
     const { name, message: errorMessage, stack } = error
-    console.warn(message, { name, message: errorMessage, stack })
+    console.warn(message, {
+      name,
+      message: errorMessage,
+      stack,
+    })
     return
   }
 
