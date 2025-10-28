@@ -1,20 +1,37 @@
-import { Authors, allAuthors } from 'contentlayer/generated'
+import { Authors } from 'contentlayer/generated'
 import { MDXLayoutRenderer } from 'pliny/mdx-components'
 import AuthorLayout from '@/layouts/AuthorLayout'
-import { coreContent } from 'pliny/utils/contentlayer'
+import SectionContainer from '@/components/SectionContainer'
+import PageTitle from '@/components/PageTitle'
 import { genPageMetadata } from 'app/seo'
+import { getAboutContent } from '@/lib/posts'
 
 export const metadata = genPageMetadata({ title: 'About' })
 
-export default function Page() {
-  const author = allAuthors.find((p) => p.slug === 'default') as Authors
-  const mainContent = coreContent(author)
+export default async function Page() {
+  const data = await getAboutContent()
+
+  if (data.source === 'microcms') {
+    return (
+      <SectionContainer>
+        <div className="space-y-8">
+          <div className="space-y-2 pt-6 pb-8 md:space-y-5">
+            <PageTitle>About</PageTitle>
+          </div>
+          <div
+            className="prose dark:prose-invert max-w-none"
+            dangerouslySetInnerHTML={{ __html: data.contentHtml }}
+          />
+        </div>
+      </SectionContainer>
+    )
+  }
+
+  const author = data.author as Authors
 
   return (
-    <>
-      <AuthorLayout content={mainContent}>
-        <MDXLayoutRenderer code={author.body.code} />
-      </AuthorLayout>
-    </>
+    <AuthorLayout content={data.content}>
+      <MDXLayoutRenderer code={author.body.code} />
+    </AuthorLayout>
   )
 }
