@@ -68,6 +68,14 @@ const buildSummary = (value: string) => {
   return `${text.slice(0, 157)}...`
 }
 
+const logMicroCMSFallback = (message: string, error: unknown) => {
+  if (error instanceof Error) {
+    console.warn(`${message} ${error.message}`)
+  } else {
+    console.warn(message, error)
+  }
+}
+
 const parseTags = (value: string) =>
   value
     .split('/')
@@ -100,7 +108,7 @@ export const getAllPosts = cache(async (): Promise<BlogListItem[]> => {
       )
       return response.contents.map(mapMicroCMSToListItem)
     } catch (error) {
-      console.warn('Falling back to contentlayer posts after microCMS fetch failure:', error)
+      logMicroCMSFallback('Falling back to contentlayer posts after microCMS fetch failure:', error)
     }
   }
 
@@ -131,7 +139,7 @@ export const getPostBySlug = cache(async (slug: string): Promise<PostDetailResul
         },
       }
     } catch (error) {
-      console.warn(
+      logMicroCMSFallback(
         `Falling back to contentlayer post for slug "${slug}" after microCMS fetch failure:`,
         error
       )
@@ -161,7 +169,10 @@ export const getAboutContent = cache(async () => {
       const entry = await fetchFromMicroCMS<MicroCMSAboutEntry>('about')
       return { source: 'microcms' as const, contentHtml: entry.aboutme || '' }
     } catch (error) {
-      console.warn('Falling back to contentlayer about page after microCMS fetch failure:', error)
+      logMicroCMSFallback(
+        'Falling back to contentlayer about page after microCMS fetch failure:',
+        error
+      )
     }
   }
 
