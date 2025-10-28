@@ -3,22 +3,21 @@
 import { usePathname } from 'next/navigation'
 import { slug } from 'github-slugger'
 import { formatDate } from 'pliny/utils/formatDate'
-import { CoreContent } from 'pliny/utils/contentlayer'
-import type { Blog } from 'contentlayer/generated'
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
-import tagData from 'app/tag-data.json'
+import { type BlogListItem } from '@/lib/posts'
 
 interface PaginationProps {
   totalPages: number
   currentPage: number
 }
 interface ListLayoutProps {
-  posts: CoreContent<Blog>[]
+  posts: BlogListItem[]
   title: string
-  initialDisplayPosts?: CoreContent<Blog>[]
+  initialDisplayPosts?: BlogListItem[]
   pagination?: PaginationProps
+  tagCounts?: Record<string, number>
 }
 
 function Pagination({ totalPages, currentPage }: PaginationProps) {
@@ -71,11 +70,19 @@ export default function ListLayoutWithTags({
   title,
   initialDisplayPosts = [],
   pagination,
+  tagCounts,
 }: ListLayoutProps) {
   const pathname = usePathname()
-  const tagCounts = tagData as Record<string, number>
-  const tagKeys = Object.keys(tagCounts)
-  const sortedTags = tagKeys.sort((a, b) => tagCounts[b] - tagCounts[a])
+  const providedTagCounts =
+    tagCounts ||
+    posts.reduce<Record<string, number>>((acc, post) => {
+      post.tags.forEach((tag) => {
+        acc[tag] = (acc[tag] || 0) + 1
+      })
+      return acc
+    }, {})
+  const tagKeys = Object.keys(providedTagCounts)
+  const sortedTags = tagKeys.sort((a, b) => providedTagCounts[b] - providedTagCounts[a])
 
   const displayPosts = initialDisplayPosts.length > 0 ? initialDisplayPosts : posts
 
@@ -102,11 +109,12 @@ export default function ListLayoutWithTags({
               )}
               <ul>
                 {sortedTags.map((t) => {
+                  const count = providedTagCounts[t]
                   return (
                     <li key={t} className="my-3">
-                      {decodeURI(pathname.split('/tags/')[1]) === slug(t) ? (
+                      {decodeURI(pathname.split('/tags/')[1] || '') === slug(t) ? (
                         <h3 className="text-primary-500 inline px-3 py-2 text-sm font-bold uppercase">
-                          {`${t} (${tagCounts[t]})`}
+                          {`${t} (${count})`}
                         </h3>
                       ) : (
                         <Link
@@ -114,7 +122,7 @@ export default function ListLayoutWithTags({
                           className="hover:text-primary-500 dark:hover:text-primary-500 px-3 py-2 text-sm font-medium text-gray-500 uppercase dark:text-gray-300"
                           aria-label={`View posts tagged ${t}`}
                         >
-                          {`${t} (${tagCounts[t]})`}
+                          {`${t} (${count})`}
                         </Link>
                       )}
                     </li>
@@ -126,9 +134,9 @@ export default function ListLayoutWithTags({
           <div>
             <ul>
               {displayPosts.map((post) => {
-                const { path, date, title, summary, tags } = post
+                const { slug: postSlug, date, title: postTitle, summary, tags } = post
                 return (
-                  <li key={path} className="py-5">
+                  <li key={postSlug} className="py-5">
                     <article className="flex flex-col space-y-2 xl:space-y-0">
                       <dl>
                         <dt className="sr-only">Published on</dt>
@@ -141,8 +149,11 @@ export default function ListLayoutWithTags({
                       <div className="space-y-3">
                         <div>
                           <h2 className="text-2xl leading-8 font-bold tracking-tight">
-                            <Link href={`/${path}`} className="text-gray-900 dark:text-gray-100">
-                              {title}
+                            <Link
+                              href={`/blog/${postSlug}`}
+                              className="text-gray-900 dark:text-gray-100"
+                            >
+                              {postTitle}
                             </Link>
                           </h2>
                           <div className="flex flex-wrap">
