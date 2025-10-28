@@ -70,10 +70,12 @@ const buildSummary = (value: string) => {
 
 const logMicroCMSFallback = (message: string, error: unknown) => {
   if (error instanceof Error) {
-    console.warn(`${message} ${error.message}`)
-  } else {
-    console.warn(message, error)
+    const { message: errorMessage, stack } = error
+    console.warn(message, { message: errorMessage, stack })
+    return
   }
+
+  console.warn(message, error)
 }
 
 const parseTags = (value: string) =>
