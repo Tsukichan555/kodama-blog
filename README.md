@@ -1,3 +1,20 @@
+このリポジトリはnext.js/tailwindのブログサイトのテンプレートです。ここに以下の変更を加えてください。
+
+- デフォルトのカラーテーマをダークにする(ユーザーが選択しない限りダークモード)
+- ヘッダーに表示するブログタイトルやSEO対策メタデータを環境変数等に取り出し、容易に編集できるようにする
+- ブログ記事をmicroCMSから取得できるようにする。後述するAPIスキーマに従ってAPIクライアントを作成し、テンプレート内の記事生成時に呼び出す。
+  featureブランチで変更を加え、作業が終わったらmainブランチへのプルリクエストを作成すること。
+
+```json: api-schema-about.json
+{"apiFields":[{"fieldId":"aboutme","name":"本文","kind":"richEditorV2","required":false},{"fieldId":"content","name":"使用しないでください(本文)","kind":"iframe","required":true,"iframeUrl":"https://microcms-md-editor-for-kodama-blog.vercel.app/"}],"customFields":[]}
+```
+
+```json: api-schema-blog.json
+{"apiFields":[{"fieldId":"title","name":"タイトル","kind":"text","required":true,"isUnique":false},{"fieldId":"tags","name":"カテゴリ(スラッシュ区切り)","kind":"text","required":true},{"fieldId":"maincontent","name":"本文","kind":"richEditorV2","required":true},{"fieldId":"pic","name":"サムネイル","kind":"media","required":false},{"fieldId":"content","name":"この欄は使用しないでください(本文)","kind":"iframe","required":false,"iframeUrl":"https://microcms-md-editor-for-kodama-blog.vercel.app/"}],"customFields":[]}
+```
+
+---
+
 ![tailwind-nextjs-banner](/public/static/images/twitter-card.png)
 
 # Tailwind Nextjs Starter Blog
