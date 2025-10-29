@@ -9,23 +9,42 @@ const siteMetadata = {
   theme: process.env.NEXT_PUBLIC_SITE_THEME || 'dark', // system, dark or light
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'https://tailwind-nextjs-starter-blog.vercel.app',
   siteRepo:
-    process.env.NEXT_PUBLIC_SITE_REPOSITORY || 'https://github.com/timlrx/tailwind-nextjs-starter-blog',
+    process.env.NEXT_PUBLIC_SITE_REPOSITORY ||
+    'https://github.com/timlrx/tailwind-nextjs-starter-blog',
   siteLogo:
     process.env.NEXT_PUBLIC_SITE_LOGO || `${process.env.BASE_PATH || ''}/static/images/logo.png`,
   socialBanner:
-    process.env.NEXT_PUBLIC_SOCIAL_BANNER || `${process.env.BASE_PATH || ''}/static/images/twitter-card.png`,
+    process.env.NEXT_PUBLIC_SOCIAL_BANNER ||
+    `${process.env.BASE_PATH || ''}/static/images/twitter-card.png`,
   mastodon: 'https://mastodon.social/@mastodonuser',
-  email: process.env.NEXT_PUBLIC_SITE_EMAIL || 'address@yoursite.com',
-  github: process.env.NEXT_PUBLIC_SITE_GITHUB || 'https://github.com',
-  x: process.env.NEXT_PUBLIC_SITE_TWITTER || 'https://twitter.com/x',
-  // twitter: 'https://twitter.com/Twitter',
-  facebook: 'https://facebook.com',
-  youtube: 'https://youtube.com',
-  linkedin: 'https://www.linkedin.com',
-  threads: 'https://www.threads.net',
-  instagram: 'https://www.instagram.com',
-  medium: 'https://medium.com',
-  bluesky: 'https://bsky.app/',
+  email: process.env.NEXT_PUBLIC_SITE_EMAIL !== undefined ? process.env.NEXT_PUBLIC_SITE_EMAIL : '',
+  github:
+    process.env.NEXT_PUBLIC_SITE_GITHUB !== undefined ? process.env.NEXT_PUBLIC_SITE_GITHUB : '',
+  x: process.env.NEXT_PUBLIC_SITE_TWITTER !== undefined ? process.env.NEXT_PUBLIC_SITE_TWITTER : '',
+  twitter:
+    process.env.NEXT_PUBLIC_SITE_TWITTER_HANDLE !== undefined
+      ? process.env.NEXT_PUBLIC_SITE_TWITTER_HANDLE
+      : '',
+  facebook:
+    process.env.NEXT_PUBLIC_SITE_FACEBOOK !== undefined
+      ? process.env.NEXT_PUBLIC_SITE_FACEBOOK
+      : '',
+  youtube:
+    process.env.NEXT_PUBLIC_SITE_YOUTUBE !== undefined ? process.env.NEXT_PUBLIC_SITE_YOUTUBE : '',
+  linkedin:
+    process.env.NEXT_PUBLIC_SITE_LINKEDIN !== undefined
+      ? process.env.NEXT_PUBLIC_SITE_LINKEDIN
+      : '',
+  threads:
+    process.env.NEXT_PUBLIC_SITE_THREADS !== undefined ? process.env.NEXT_PUBLIC_SITE_THREADS : '',
+  instagram:
+    process.env.NEXT_PUBLIC_SITE_INSTAGRAM !== undefined
+      ? process.env.NEXT_PUBLIC_SITE_INSTAGRAM
+      : '',
+  medium:
+    process.env.NEXT_PUBLIC_SITE_MEDIUM !== undefined ? process.env.NEXT_PUBLIC_SITE_MEDIUM : '',
+  bluesky:
+    process.env.NEXT_PUBLIC_SITE_BLUESKY !== undefined ? process.env.NEXT_PUBLIC_SITE_BLUESKY : '',
   locale: process.env.NEXT_PUBLIC_SITE_LOCALE || 'en-US',
   // set to true if you want a navbar fixed to the top
   stickyNav: false,
@@ -52,11 +71,6 @@ const siteMetadata = {
     // googleAnalytics: {
     //   googleAnalyticsId: '', // e.g. G-XXXXXXX
     // },
-  },
-  newsletter: {
-    // supports mailchimp, buttondown, convertkit, klaviyo, revue, emailoctopus, beehive
-    // Please add your .env file and modify it according to your selection
-    provider: 'buttondown',
   },
   comments: {
     // If you want to use an analytics provider you have to add it to the
