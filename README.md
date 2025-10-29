@@ -13,6 +13,23 @@
 {"apiFields":[{"fieldId":"title","name":"タイトル","kind":"text","required":true,"isUnique":false},{"fieldId":"tags","name":"カテゴリ(スラッシュ区切り)","kind":"text","required":true},{"fieldId":"maincontent","name":"本文","kind":"richEditorV2","required":true},{"fieldId":"pic","name":"サムネイル","kind":"media","required":false},{"fieldId":"content","name":"この欄は使用しないでください(本文)","kind":"iframe","required":false,"iframeUrl":"https://microcms-md-editor-for-kodama-blog.vercel.app/"}],"customFields":[]}
 ```
 
+## セットアップ手順
+
+1. 依存関係をインストールする
+   ```bash
+   pnpm install # or npm install / yarn
+   ```
+2. `.env` を参考に `.env.local` を作成し、サイト設定とmicroCMSの資格情報を記入する
+   - `NEXT_PUBLIC_SITE_TITLE` など `NEXT_PUBLIC_` で始まる値はサイトヘッダーやSEOメタデータに反映される
+   - `MICROCMS_SERVICE_DOMAIN` にはサービスIDのみを設定する（例: `lockhoda-martin`）。`https://` や `/api/v1` を含めると `fetch failed` でmicroCMSから取得できなくなる
+   - `MICROCMS_API_KEY` に管理画面で発行したAPIキーを設定する
+3. 開発サーバーを起動する
+   ```bash
+   pnpm dev
+   ```
+
+microCMSの環境変数が未設定または不正な場合、ログに `Falling back to contentlayer posts after microCMS fetch failure` と表示され、Contentlayerのローカル記事にフォールバックする。
+
 ---
 
 ![tailwind-nextjs-banner](/public/static/images/twitter-card.png)

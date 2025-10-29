@@ -32,7 +32,12 @@ interface MicroCMSBlogEntry {
 }
 
 interface MicroCMSAboutEntry {
+  id?: string
   aboutme?: string
+  createdAt?: string
+  updatedAt?: string
+  publishedAt?: string
+  revisedAt?: string
 }
 
 export interface BlogListItem {
@@ -172,8 +177,13 @@ export const getPostBySlug = cache(async (slug: string): Promise<PostDetailResul
 export const getAboutContent = cache(async () => {
   if (isMicroCMSEnabled()) {
     try {
-      const entry = await fetchFromMicroCMS<MicroCMSAboutEntry>('about')
-      return { source: 'microcms' as const, contentHtml: entry.aboutme || '' }
+      const response =
+        await fetchFromMicroCMS<MicroCMSListResponse<MicroCMSAboutEntry>>('about?limit=1')
+      const entry = response.contents[0]
+      if (entry?.aboutme) {
+        return { source: 'microcms' as const, contentHtml: entry.aboutme }
+      }
+      console.warn('microCMS about content is empty; falling back to contentlayer author content.')
     } catch (error) {
       logMicroCMSFallback(
         'Falling back to contentlayer about page after microCMS fetch failure:',
