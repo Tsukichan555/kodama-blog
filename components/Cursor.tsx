@@ -187,7 +187,7 @@ const Cursor = () => {
   const imageSrc = '/rocket-cursor2.png'
 
   const rotateAnimation = isLaunching || isPressed ? 45 : isHoveringLink ? 0 : -12
-  const rotateTransition = { type: 'spring', stiffness: 600, damping: 45 }
+  const rotateTransition = { type: 'spring' as const, stiffness: 600, damping: 45 }
 
   return (
     <motion.div
@@ -211,7 +211,7 @@ const Cursor = () => {
           opacity: { duration: 0.12 },
           scale: isLaunching
             ? { duration: 0.6, ease: LAUNCH_EASE, times: [0, 0.4, 1] }
-            : { type: 'spring', stiffness: 500, damping: 42 },
+            : { type: 'spring' as const, stiffness: 500, damping: 42 },
           rotate: rotateTransition,
           y: isLaunching
             ? { duration: 0.45, times: [0, 0.3, 0.6, 1], ease: LAUNCH_EASE }
