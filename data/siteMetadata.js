@@ -15,7 +15,7 @@ const siteMetadata = {
     process.env.NEXT_PUBLIC_SITE_LOGO || `${process.env.BASE_PATH || ''}/static/images/logo.png`,
   socialBanner:
     process.env.NEXT_PUBLIC_SOCIAL_BANNER ||
-    `${process.env.BASE_PATH || ''}/static/images/twitter-card.png`,
+    `${process.env.BASE_PATH || ''}/static/images/card.png`,
   mastodon: 'https://mastodon.social/@mastodonuser',
   email: process.env.NEXT_PUBLIC_SITE_EMAIL !== undefined ? process.env.NEXT_PUBLIC_SITE_EMAIL : '',
   github:
