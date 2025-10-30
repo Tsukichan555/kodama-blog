@@ -1,14 +1,15 @@
 'use client'
 
-import { animate } from 'motion'
+import { animate, AnimationPlaybackControls } from 'motion'
 import { motion, useMotionValue, useSpring, useTransform } from 'motion/react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 const LINK_SELECTOR = 'a, [role="link"]'
 const OFFSET_X = 12
 const OFFSET_Y = 16
-const IMAGE_SWAP_DELAY = 160
-const LAUNCH_RESET_DELAY = 1100
+const LAUNCH_EASE = [0.37, 0, 0.63, 1] as const
+const LAUNCH_ACCEL_EASE = [0.16, 0.5, 0.3, 1] as const
+const LAUNCH_TOP_MARGIN = 96
 
 function isPointerFine() {
   return typeof window !== 'undefined' && window.matchMedia('(pointer: fine)').matches
@@ -19,13 +20,11 @@ const Cursor = () => {
   const [isHoveringLink, setIsHoveringLink] = useState(false)
   const [isPressed, setIsPressed] = useState(false)
   const [isLaunching, setIsLaunching] = useState(false)
-  const [isFlying, setIsFlying] = useState(false)
 
   const pressedLinkRef = useRef<HTMLElement | null>(null)
   const isPressingRef = useRef(false)
   const isLaunchingRef = useRef(false)
-  const launchResetTimeoutRef = useRef<number | null>(null)
-  const imageSwapTimeoutRef = useRef<number | null>(null)
+  const launchAnimationRef = useRef<AnimationPlaybackControls | null>(null)
 
   const x = useMotionValue(0)
   const y = useMotionValue(0)
@@ -37,48 +36,52 @@ const Cursor = () => {
   const offsetY = useTransform(smoothY, (value) => value + OFFSET_Y)
 
   const launchBoost = useMotionValue(0)
-  const combinedY = useTransform([offsetY, launchBoost], ([base, boost]) => base + boost)
-
-  const clearLaunchTimers = useCallback(() => {
-    if (launchResetTimeoutRef.current !== null) {
-      window.clearTimeout(launchResetTimeoutRef.current)
-      launchResetTimeoutRef.current = null
-    }
-    if (imageSwapTimeoutRef.current !== null) {
-      window.clearTimeout(imageSwapTimeoutRef.current)
-      imageSwapTimeoutRef.current = null
-    }
-  }, [])
+  const combinedY = useTransform(
+    [offsetY, launchBoost],
+    ([base, boost]: [number, number]) => base + boost
+  )
 
   const resetSequence = useCallback(() => {
-    clearLaunchTimers()
+    launchAnimationRef.current?.stop()
+    launchAnimationRef.current = null
+    isLaunchingRef.current = false
     pressedLinkRef.current = null
     isPressingRef.current = false
-    isLaunchingRef.current = false
     setIsPressed(false)
     setIsLaunching(false)
-    setIsFlying(false)
     launchBoost.set(0)
-  }, [clearLaunchTimers, launchBoost])
+  }, [launchBoost])
 
   const startLaunchSequence = useCallback(() => {
-    clearLaunchTimers()
+    if (isLaunchingRef.current) return
+
+    const baseY = offsetY.get() as number
+    const finalBoost = -(baseY + LAUNCH_TOP_MARGIN)
+    const travelDistance = Math.abs(finalBoost)
+    const duration = Math.min(2, Math.max(0.9, travelDistance / 500))
+
+    launchAnimationRef.current?.stop()
+    launchBoost.set(0)
+
     isLaunchingRef.current = true
     setIsLaunching(true)
     setIsPressed(false)
-    setIsFlying(false)
-    launchBoost.set(0)
 
-    imageSwapTimeoutRef.current = window.setTimeout(() => {
-      setIsFlying(true)
-    }, IMAGE_SWAP_DELAY)
+    const controls = animate(launchBoost, [0, -18, 12, finalBoost], {
+      duration,
+      ease: ['easeInOut', 'easeOut', LAUNCH_ACCEL_EASE],
+      times: [0, 0.2, 0.32, 1],
+    })
 
-    launchResetTimeoutRef.current = window.setTimeout(() => {
+    launchAnimationRef.current = controls
+
+    controls.then(() => {
+      launchAnimationRef.current = null
       isLaunchingRef.current = false
       setIsLaunching(false)
-      setIsFlying(false)
-    }, LAUNCH_RESET_DELAY)
-  }, [clearLaunchTimers, launchBoost])
+      launchBoost.set(0)
+    })
+  }, [launchBoost, offsetY])
 
   useEffect(() => {
     if (!isPointerFine()) return
@@ -86,6 +89,7 @@ const Cursor = () => {
     setIsEnabled(true)
 
     const handlePointerMove = (event: PointerEvent) => {
+      if (isLaunchingRef.current) return
       x.set(event.clientX)
       y.set(event.clientY)
     }
@@ -109,6 +113,7 @@ const Cursor = () => {
     }
 
     const handlePointerDown = (event: PointerEvent) => {
+      if (isLaunchingRef.current) return
       const element = event.target as HTMLElement | null
       const link = element?.closest(LINK_SELECTOR) as HTMLElement | null
       if (!link) return
@@ -171,45 +176,18 @@ const Cursor = () => {
   }, [isEnabled, resetSequence])
 
   useEffect(() => {
-    const controls = animate(
-      launchBoost,
-      isLaunching ? [-8, -14, -220] : 0,
-      isLaunching
-        ? { duration: 1, ease: [0.16, 0.5, 0.3, 1], times: [0, 0.25, 1] }
-        : { type: 'spring', stiffness: 260, damping: 30 }
-    )
-
     return () => {
-      controls.stop()
+      launchAnimationRef.current?.stop()
     }
-  }, [isLaunching, launchBoost])
-
-  useEffect(() => {
-    return () => {
-      clearLaunchTimers()
-    }
-  }, [clearLaunchTimers])
+  }, [])
 
   if (!isEnabled) return null
 
   const isCursorVisible = isHoveringLink || isPressed || isLaunching
-  const imageSrc = isFlying ? '/rocket-flying.png' : '/rocket-cursor2.png'
+  const imageSrc = '/rocket-cursor2.png'
 
-  const rotateAnimation = isLaunching
-    ? isFlying
-      ? 0
-      : [45, 42, 48, 45]
-    : isPressed
-      ? 45
-      : isHoveringLink
-        ? 0
-        : -12
-
-  const rotateTransition = isLaunching
-    ? isFlying
-      ? { duration: 0.2 }
-      : { duration: 0.6, ease: [0.37, 0, 0.63, 1], times: [0, 0.3, 0.7, 1] }
-    : { type: 'spring', stiffness: 600, damping: 45 }
+  const rotateAnimation = isLaunching || isPressed ? 45 : isHoveringLink ? 0 : -12
+  const rotateTransition = { type: 'spring', stiffness: 600, damping: 45 }
 
   return (
     <motion.div
@@ -232,11 +210,11 @@ const Cursor = () => {
         transition={{
           opacity: { duration: 0.12 },
           scale: isLaunching
-            ? { duration: 0.6, ease: [0.37, 0, 0.63, 1], times: [0, 0.4, 1] }
+            ? { duration: 0.6, ease: LAUNCH_EASE, times: [0, 0.4, 1] }
             : { type: 'spring', stiffness: 500, damping: 42 },
           rotate: rotateTransition,
           y: isLaunching
-            ? { duration: 0.45, times: [0, 0.3, 0.6, 1], ease: [0.37, 0, 0.63, 1] }
+            ? { duration: 0.45, times: [0, 0.3, 0.6, 1], ease: LAUNCH_EASE }
             : { duration: 0.2 },
         }}
         className="pointer-events-none h-10 w-10 select-none"
