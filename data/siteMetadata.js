@@ -2,7 +2,7 @@
 const siteMetadata = {
   title: process.env.NEXT_PUBLIC_SITE_TITLE || 'Next.js Starter Blog',
   author: process.env.NEXT_PUBLIC_SITE_AUTHOR || 'Tails Azimuth',
-  headerTitle: process.env.NEXT_PUBLIC_HEADER_TITLE || 'TailwindBlog',
+  headerTitle: process.env.NEXT_PUBLIC_HEADER_TITLE || '',
   description:
     process.env.NEXT_PUBLIC_SITE_DESCRIPTION || 'A blog created with Next.js and Tailwind.css',
   language: process.env.NEXT_PUBLIC_SITE_LANGUAGE || 'en-us',
