@@ -5,6 +5,7 @@ import { allCoreContent, coreContent, sortPosts, type CoreContent } from 'pliny/
 import { allBlogs, allAuthors, type Blog, type Authors } from 'contentlayer/generated'
 
 import { fetchFromMicroCMS, isMicroCMSEnabled } from './microcms/client'
+import { projectEntrypointsSubscribe } from 'next/dist/build/swc/generated-native'
 
 interface MicroCMSListResponse<T> {
   contents: T[]
@@ -195,3 +196,38 @@ export const getAboutContent = cache(async () => {
   const author = allAuthors.find((item) => item.slug === 'default') as Authors
   return { source: 'contentlayer' as const, author, content: coreContent(author) }
 })
+
+//下書きプレビュー用
+export interface MicroCMSDraftParams {
+  id: string
+  draftKey: string
+}
+
+// /api/draftのJSON返却型
+export interface DraftPreviewResponse {
+  source: 'microcms'
+  post: MicroCMSBlogDetail
+}
+
+export const getDraftPost = async (params: MicroCMSDraftParams): Promise<DraftPreviewResponse> => {
+  //Promise<T> TにはPromiseが履行された(fulfilled)ときに返す値の型を指定します
+  const { id, draftKey } = params
+  if (!isMicroCMSEnabled()) throw new Error('microCMS disabled')
+
+  try {
+    const entry = await fetchFromMicroCMS<MicroCMSBlogEntry>(`blog/${id}?draftKey=${draftKey}`)
+    const post: MicroCMSBlogDetail = {
+      ...mapMicroCMSToListItem(entry),
+      contentHtml: entry.maincontent,
+      updatedAt: entry.updatedAt,
+      heroImage: entry.pic || null,
+    }
+    return {
+      source: 'microcms',
+      post,
+    }
+  } catch (error) {
+    logMicroCMSFallback('Failed to fetch microCMS draft:', error)
+    throw error
+  }
+}
