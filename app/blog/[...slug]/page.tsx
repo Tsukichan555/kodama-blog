@@ -146,15 +146,18 @@ export default async function Page(props: { params: Promise<{ slug: string[] }> 
       name: author.name,
     }
   })
+  const jsonLdContent = JSON.stringify(jsonLd)
+  const hasJsonLdContent = Boolean(jsonLdContent && jsonLdContent.trim())
 
   const Layout = layouts[post.layout || defaultLayout]
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      {hasJsonLdContent ? (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdContent }} />
+      ) : (
+        <script type="application/ld+json" />
+      )}
       <Layout content={mainContent} authorDetails={authorDetails} next={next} prev={prev}>
         <MDXLayoutRenderer code={post.body.code} components={components} toc={post.toc} />
       </Layout>

@@ -18,10 +18,14 @@ export default async function Page() {
           <div className="space-y-2 pt-6 pb-8 md:space-y-5">
             <PageTitle>About</PageTitle>
           </div>
-          <div
-            className="prose dark:prose-invert max-w-none"
-            dangerouslySetInnerHTML={{ __html: data.contentHtml }}
-          />
+          {data.contentHtml && data.contentHtml.trim() ? (
+            <div
+              className="prose dark:prose-invert max-w-none"
+              dangerouslySetInnerHTML={{ __html: data.contentHtml }}
+            />
+          ) : (
+            <div className="prose dark:prose-invert max-w-none" />
+          )}
         </div>
       </SectionContainer>
     )
