@@ -1,45 +1,52 @@
-// app/draft/page.tsx でも /draft/[[...all]]/page.tsx でも可
-'use client'
+import 'css/prism.css'
+import 'katex/dist/katex.css'
 
-import { Suspense, useEffect, useState } from 'react'
-import { useSearchParams } from 'next/navigation'
-import type { DraftPreviewResponse } from '@/lib/posts'
+import { notFound } from 'next/navigation'
+import MicroCMSPostLayout from '@/layouts/MicroCMSPostLayout'
+import { getDraftPost, getAllPosts, type BlogListItem } from '@/lib/posts'
 
-function DraftPreviewContent() {
-  const searchParams = useSearchParams()
-  const [data, setData] = useState<DraftPreviewResponse | null>(null)
-  const [loading, setLoading] = useState(true)
+type DraftSearchParams = { [key: string]: string | string[] | undefined }
 
-  useEffect(() => {
-    const id = searchParams.get('id')
-    const draftKey = searchParams.get('draftKey')
-    if (!id || !draftKey) return
-
-    setLoading(true)
-    ;(async () => {
-      const res = await fetch(`/api/draft?id=${id}&draftKey=${draftKey}`, { cache: 'no-store' })
-      const json = await res.json()
-      setData(json)
-      setLoading(false)
-    })()
-  }, [searchParams])
-
-  if (loading) return <p>loading…</p>
-  if (!data) return <p>not found</p>
-
-  const { post } = data
-  return (
-    <main>
-      <h1>{post.title}</h1>
-      <article dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
-    </main>
-  )
+const getSingleParam = (value: string | string[] | undefined) => {
+  if (!value) return undefined
+  return Array.isArray(value) ? value[0] : value
 }
 
-export default function DraftPreviewPage() {
-  return (
-    <Suspense fallback={<p>loading…</p>}>
-      <DraftPreviewContent />
-    </Suspense>
-  )
+export default async function DraftPreviewPage({
+  searchParams,
+}: {
+  searchParams: Promise<DraftSearchParams>
+}) {
+  const resolvedParams = await searchParams
+  const id = getSingleParam(resolvedParams?.id)
+  const draftKey = getSingleParam(resolvedParams?.draftKey)
+
+  if (!id || !draftKey) {
+    return notFound()
+  }
+
+  let data
+  try {
+    data = await getDraftPost({ id, draftKey })
+  } catch {
+    return notFound()
+  }
+
+  const { post } = data
+
+  let prev: BlogListItem | undefined
+  let next: BlogListItem | undefined
+
+  try {
+    const posts = await getAllPosts()
+    const index = posts.findIndex((item) => item.slug === post.slug)
+    if (index !== -1) {
+      prev = index + 1 < posts.length ? posts[index + 1] : undefined
+      next = index - 1 >= 0 ? posts[index - 1] : undefined
+    }
+  } catch {
+    // Fallback to rendering the draft post without navigation
+  }
+
+  return <MicroCMSPostLayout post={post} prev={prev} next={next} />
 }
