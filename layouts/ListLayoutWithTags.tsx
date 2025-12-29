@@ -194,7 +194,7 @@ export default function ListLayoutWithTags({
                         <div className="prose max-w-none text-gray-500 dark:text-gray-400">
                           {summary}
                         </div>
-                        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-base leading-6 font-medium">
+                        <div className="flex items-center justify-between text-base leading-6 font-medium">
                           <time
                             dateTime={date}
                             suppressHydrationWarning

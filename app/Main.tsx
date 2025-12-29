@@ -3,6 +3,7 @@ import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import { type BlogListItem } from '@/lib/posts'
 import Image from '@/components/Image'
+import AirplaneIcon from '@/components/AirplaneIcon'
 
 const MAX_DISPLAY = 5
 
@@ -85,16 +86,17 @@ export default function Home({ posts }: { posts: BlogListItem[] }) {
                           {summary}
                         </div>
                       </div>
-                      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-base leading-6 font-medium">
+                      <div className="flex items-center justify-between text-base leading-6 font-medium">
                         <time dateTime={date} className="text-gray-500 dark:text-gray-400">
                           {formatDateYMD(date)}
                         </time>
                         <Link
                           href={`/blog/${slug}`}
-                          className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                          className="group text-primary-500 hover:text-primary-600 dark:hover:text-primary-400 mr-8 inline-flex items-center gap-2"
                           aria-label={`Read more: "${title}"`}
                         >
-                          Read more &rarr;
+                          <span>Read more</span>
+                          <AirplaneIcon className="transition-transform duration-150 group-hover:translate-x-1" />
                         </Link>
                       </div>
                     </div>
