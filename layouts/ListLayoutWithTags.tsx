@@ -2,11 +2,31 @@
 
 import { usePathname } from 'next/navigation'
 import { slug } from 'github-slugger'
-import { formatDate } from 'pliny/utils/formatDate'
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
-import siteMetadata from '@/data/siteMetadata'
 import { type BlogListItem } from '@/lib/posts'
+import Image from '@/components/Image'
+
+const formatDateYMD = (value: string) => {
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) {
+    return value
+  }
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}/${month}/${day}`
+}
+
+const getHeroImageUrl = (heroImage?: BlogListItem['heroImage']) => {
+  if (!heroImage) {
+    return null
+  }
+  if (typeof heroImage === 'string') {
+    return heroImage
+  }
+  return heroImage.url || null
+}
 
 interface PaginationProps {
   totalPages: number
@@ -134,19 +154,28 @@ export default function ListLayoutWithTags({
           <div>
             <ul>
               {displayPosts.map((post) => {
-                const { slug: postSlug, date, title: postTitle, summary, tags } = post
+                const { slug: postSlug, date, title: postTitle, summary, tags, heroImage } = post
+                const imageUrl = getHeroImageUrl(heroImage)
                 return (
                   <li key={postSlug} className="py-5">
-                    <article className="flex flex-col space-y-2 xl:space-y-0">
-                      <dl>
-                        <dt className="sr-only">Published on</dt>
-                        <dd className="text-base leading-6 font-medium text-gray-500 dark:text-gray-400">
-                          <time dateTime={date} suppressHydrationWarning>
-                            {formatDate(date, siteMetadata.locale)}
-                          </time>
-                        </dd>
-                      </dl>
-                      <div className="space-y-3">
+                    <article className="space-y-2 xl:grid xl:grid-cols-4 xl:items-stretch xl:space-y-0">
+                      <div className="pr-4">
+                        <div className="relative aspect-[4/3] w-full overflow-hidden xl:aspect-auto xl:h-full">
+                          {imageUrl ? (
+                            <Image
+                              src={imageUrl}
+                              alt={postTitle}
+                              fill
+                              sizes="(min-width: 1280px) 25vw, 100vw"
+                              className="object-cover"
+                            />
+                          ) : (
+                            <div className="h-full w-full bg-gray-100 dark:bg-gray-800" />
+                          )}
+                          <div className="pointer-events-none absolute inset-0 bg-black/20" />
+                        </div>
+                      </div>
+                      <div className="space-y-3 xl:col-span-3">
                         <div>
                           <h2 className="text-2xl leading-8 font-bold tracking-tight">
                             <Link
@@ -164,6 +193,22 @@ export default function ListLayoutWithTags({
                         </div>
                         <div className="prose max-w-none text-gray-500 dark:text-gray-400">
                           {summary}
+                        </div>
+                        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-base leading-6 font-medium">
+                          <time
+                            dateTime={date}
+                            suppressHydrationWarning
+                            className="text-gray-500 dark:text-gray-400"
+                          >
+                            {formatDateYMD(date)}
+                          </time>
+                          <Link
+                            href={`/blog/${postSlug}`}
+                            className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                            aria-label={`Read more: "${postTitle}"`}
+                          >
+                            Read more &rarr;
+                          </Link>
                         </div>
                       </div>
                     </article>

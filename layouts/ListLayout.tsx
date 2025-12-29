@@ -2,12 +2,11 @@
 
 import { useState } from 'react'
 import { usePathname } from 'next/navigation'
-import { formatDate } from 'pliny/utils/formatDate'
 import { CoreContent } from 'pliny/utils/contentlayer'
 import type { Blog } from 'contentlayer/generated'
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
-import siteMetadata from '@/data/siteMetadata'
+import Image from '@/components/Image'
 
 interface PaginationProps {
   totalPages: number
@@ -18,6 +17,24 @@ interface ListLayoutProps {
   title: string
   initialDisplayPosts?: CoreContent<Blog>[]
   pagination?: PaginationProps
+}
+
+const formatDateYMD = (value: string) => {
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) {
+    return value
+  }
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}/${month}/${day}`
+}
+
+const getHeroImageUrl = (post: CoreContent<Blog>) => {
+  if (Array.isArray(post.images)) {
+    return post.images[0] || null
+  }
+  return post.images || null
 }
 
 function Pagination({ totalPages, currentPage }: PaginationProps) {
@@ -119,15 +136,26 @@ export default function ListLayout({
           {!filteredBlogPosts.length && 'No posts found.'}
           {displayPosts.map((post) => {
             const { path, date, title, summary, tags } = post
+            const imageUrl = getHeroImageUrl(post)
             return (
               <li key={path} className="py-4">
-                <article className="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
-                  <dl>
-                    <dt className="sr-only">Published on</dt>
-                    <dd className="text-base leading-6 font-medium text-gray-500 dark:text-gray-400">
-                      <time dateTime={date}>{formatDate(date, siteMetadata.locale)}</time>
-                    </dd>
-                  </dl>
+                <article className="space-y-2 xl:grid xl:grid-cols-4 xl:items-stretch xl:space-y-0">
+                  <div className="pr-4">
+                    <div className="relative aspect-[4/3] w-full overflow-hidden xl:aspect-auto xl:h-full">
+                      {imageUrl ? (
+                        <Image
+                          src={imageUrl}
+                          alt={title}
+                          fill
+                          sizes="(min-width: 1280px) 25vw, 100vw"
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="h-full w-full bg-gray-100 dark:bg-gray-800" />
+                      )}
+                      <div className="pointer-events-none absolute inset-0 bg-black/20" />
+                    </div>
+                  </div>
                   <div className="space-y-3 xl:col-span-3">
                     <div>
                       <h3 className="text-2xl leading-8 font-bold tracking-tight">
@@ -143,6 +171,18 @@ export default function ListLayout({
                     </div>
                     <div className="prose max-w-none text-gray-500 dark:text-gray-400">
                       {summary}
+                    </div>
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-base leading-6 font-medium">
+                      <time dateTime={date} className="text-gray-500 dark:text-gray-400">
+                        {formatDateYMD(date)}
+                      </time>
+                      <Link
+                        href={`/${path}`}
+                        className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                        aria-label={`Read more: "${title}"`}
+                      >
+                        Read more &rarr;
+                      </Link>
                     </div>
                   </div>
                 </article>

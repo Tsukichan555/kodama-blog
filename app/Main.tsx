@@ -1,10 +1,31 @@
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
-import { formatDate } from 'pliny/utils/formatDate'
 import { type BlogListItem } from '@/lib/posts'
+import Image from '@/components/Image'
 
 const MAX_DISPLAY = 5
+
+const formatDateYMD = (value: string) => {
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) {
+    return value
+  }
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}/${month}/${day}`
+}
+
+const getHeroImageUrl = (heroImage?: BlogListItem['heroImage']) => {
+  if (!heroImage) {
+    return null
+  }
+  if (typeof heroImage === 'string') {
+    return heroImage
+  }
+  return heroImage.url || null
+}
 
 export default function Home({ posts }: { posts: BlogListItem[] }) {
   return (
@@ -21,17 +42,28 @@ export default function Home({ posts }: { posts: BlogListItem[] }) {
         <ul className="divide-y divide-gray-200 dark:divide-gray-700">
           {!posts.length && 'No posts found.'}
           {posts.slice(0, MAX_DISPLAY).map((post) => {
-            const { slug, date, title, summary, tags } = post
+            const { slug, date, title, summary, tags, heroImage } = post
+            const imageUrl = getHeroImageUrl(heroImage)
             return (
               <li key={slug} className="py-12">
                 <article>
-                  <div className="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
-                    <dl>
-                      <dt className="sr-only">Published on</dt>
-                      <dd className="text-base leading-6 font-medium text-gray-500 dark:text-gray-400">
-                        <time dateTime={date}>{formatDate(date, siteMetadata.locale)}</time>
-                      </dd>
-                    </dl>
+                  <div className="space-y-2 xl:grid xl:grid-cols-4 xl:items-stretch xl:space-y-0">
+                    <div className="pr-4">
+                      <div className="relative aspect-[4/3] w-full overflow-hidden xl:aspect-auto xl:h-full">
+                        {imageUrl ? (
+                          <Image
+                            src={imageUrl}
+                            alt={title}
+                            fill
+                            sizes="(min-width: 1280px) 25vw, 100vw"
+                            className="object-cover"
+                          />
+                        ) : (
+                          <div className="h-full w-full bg-gray-100 dark:bg-gray-800" />
+                        )}
+                        <div className="pointer-events-none absolute inset-0 bg-black/20" />
+                      </div>
+                    </div>
                     <div className="space-y-5 xl:col-span-3">
                       <div className="space-y-6">
                         <div>
@@ -53,7 +85,10 @@ export default function Home({ posts }: { posts: BlogListItem[] }) {
                           {summary}
                         </div>
                       </div>
-                      <div className="text-base leading-6 font-medium">
+                      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-base leading-6 font-medium">
+                        <time dateTime={date} className="text-gray-500 dark:text-gray-400">
+                          {formatDateYMD(date)}
+                        </time>
                         <Link
                           href={`/blog/${slug}`}
                           className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
