@@ -12,7 +12,7 @@ const formatDateYYMMDD = (value: string) => {
   if (Number.isNaN(date.getTime())) {
     return value
   }
-  const year = String(date.getFullYear()).slice(-2)
+  const year = String(date.getFullYear())
   const month = String(date.getMonth() + 1).padStart(2, '0')
   const day = String(date.getDate()).padStart(2, '0')
   return `${year}/${month}/${day}`
@@ -39,15 +39,11 @@ export default function MicroCMSPostLayout({ post, prev, next }: MicroCMSPostLay
                   <dt className="sr-only">Created at</dt>
                   <dd className="text-base leading-6 font-medium text-gray-500 dark:text-gray-400">
                     <div>
-                      <time dateTime={createdAt}>
-                        {`created at ${formatDateYYMMDD(createdAt)}`}
-                      </time>
+                      <time dateTime={createdAt}>{`${formatDateYYMMDD(createdAt)} 投稿`}</time>
                     </div>
                     {revisedAt ? (
                       <div>
-                        <time dateTime={revisedAt}>
-                          {`revised at ${formatDateYYMMDD(revisedAt)}`}
-                        </time>
+                        <time dateTime={revisedAt}>{`${formatDateYYMMDD(revisedAt)} 編集`}</time>
                       </div>
                     ) : null}
                   </dd>
