@@ -15,7 +15,7 @@ const ContentSecurityPolicy = `
   media-src *.s3.amazonaws.com;
   connect-src *;
   font-src 'self';
-  frame-src giscus.app https://www.youtube.com https://www.youtube-nocookie.com https://*.youtube.com https://*.youtube-nocookie.com;
+  frame-src giscus.app https://www.youtube.com https://www.youtube-nocookie.com https://*.youtube.com https://*.youtube-nocookie.com https://platform.twitter.com https://twitter.com https://*.twitter.com https://x.com https://*.x.com https://www.instagram.com https://gist.github.com https://www.amazon.com https://open.spotify.com https://www.slideshare.net https://substack.com https://*.substack.com https://*.autodesk.com https://codesandbox.io https://speakerdeck.com https://stackblitz.com;
 `
 
 const securityHeaders = [
