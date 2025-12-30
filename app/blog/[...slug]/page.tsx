@@ -37,8 +37,8 @@ export async function generateMetadata(props: {
   if (postResult.source === 'microcms') {
     const { post } = postResult
     const description = post.summary || siteMetadata.description
-    const publishedAt = new Date(post.publishedAt).toISOString()
-    const modifiedAt = new Date(post.updatedAt || post.publishedAt).toISOString()
+    const createdAt = new Date(post.createdAt).toISOString()
+    const revisedAt = new Date(post.revisedAt || post.createdAt).toISOString()
     const imageList = post.heroImage?.url ? [post.heroImage.url] : [siteMetadata.socialBanner]
     const ogImages = imageList.map((img) => ({ url: img }))
 
@@ -54,8 +54,8 @@ export async function generateMetadata(props: {
         siteName: siteMetadata.title,
         locale: siteMetadata.locale?.replace('-', '_') || 'en_US',
         type: 'article',
-        publishedTime: publishedAt,
-        modifiedTime: modifiedAt,
+        publishedTime: createdAt,
+        modifiedTime: revisedAt,
         url: canonicalUrl,
         images: ogImages,
         authors: [siteMetadata.author],
@@ -70,8 +70,8 @@ export async function generateMetadata(props: {
   }
 
   const { post, authors } = postResult
-  const publishedAt = new Date(post.date).toISOString()
-  const modifiedAt = new Date(post.lastmod || post.date).toISOString()
+  const createdAt = new Date(post.date).toISOString()
+  const revisedAt = new Date(post.lastmod || post.date).toISOString()
   const authorsList = authors.map((author) => author.name)
   let imageList = [siteMetadata.socialBanner]
   if (post.images) {
@@ -95,8 +95,8 @@ export async function generateMetadata(props: {
       siteName: siteMetadata.title,
       locale: 'en_US',
       type: 'article',
-      publishedTime: publishedAt,
-      modifiedTime: modifiedAt,
+      publishedTime: createdAt,
+      modifiedTime: revisedAt,
       url: canonicalUrl,
       images: ogImages,
       authors: authorsList.length > 0 ? authorsList : [siteMetadata.author],

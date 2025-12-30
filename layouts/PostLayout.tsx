@@ -36,8 +36,9 @@ interface LayoutProps {
 
 export default function PostLayout({ content, authorDetails, next, prev, children }: LayoutProps) {
   const { filePath, path, slug, date, lastmod, title, tags } = content
-  const publishedAt = date
-  const updatedAt = lastmod || date
+  const createdAt = date
+  const revisedAt = lastmod || date
+  const showUpdatedAt = Boolean(lastmod)
   const basePath = path.split('/')[0]
 
   return (
@@ -49,19 +50,21 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
             <div className="space-y-1 text-center">
               <dl className="space-y-10">
                 <div>
-                  <dt className="sr-only">Published at</dt>
-                  <dt className="sr-only">Updated at</dt>
+                  <dt className="sr-only">Created at</dt>
+                  {showUpdatedAt ? <dt className="sr-only">Revised at</dt> : null}
                   <dd className="text-base leading-6 font-medium text-gray-500 dark:text-gray-400">
                     <div>
-                      <time dateTime={publishedAt}>
-                        {`published at ${formatDateYYMMDD(publishedAt)}`}
+                      <time dateTime={createdAt}>
+                        {`created at ${formatDateYYMMDD(createdAt)}`}
                       </time>
                     </div>
-                    <div>
-                      <time dateTime={updatedAt}>
-                        {`updated at ${formatDateYYMMDD(updatedAt)}`}
-                      </time>
-                    </div>
+                    {showUpdatedAt ? (
+                      <div>
+                        <time dateTime={revisedAt}>
+                          {`revised at ${formatDateYYMMDD(revisedAt)}`}
+                        </time>
+                      </div>
+                    ) : null}
                   </dd>
                 </div>
               </dl>

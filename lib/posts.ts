@@ -28,6 +28,7 @@ interface MicroCMSBlogEntry {
   pic?: MicroCMSMedia
   publishedAt?: string
   revisedAt?: string
+  overwroteCreatedAt?: string
   createdAt: string
   updatedAt: string
 }
@@ -47,8 +48,8 @@ export interface BlogListItem {
   summary: string
   tags: string[]
   date: string
-  publishedAt: string
-  updatedAt?: string
+  createdAt: string
+  revisedAt?: string
   heroImage?: MicroCMSMedia | string | null
 }
 
@@ -96,29 +97,31 @@ const parseTags = (value: string) =>
     .filter(Boolean)
 
 const mapMicroCMSToListItem = (entry: MicroCMSBlogEntry): BlogListItem => {
-  const publishedAt = entry.publishedAt || entry.createdAt
+  const createdAt = entry.overwroteCreatedAt ?? entry.createdAt
+  const revisedAt = entry.overwroteCreatedAt ? undefined : entry.revisedAt || entry.updatedAt
   return {
     slug: entry.id,
     title: entry.title,
     summary: buildSummary(entry.maincontent || ''),
     tags: parseTags(entry.tags || ''),
-    date: publishedAt,
-    publishedAt,
-    updatedAt: entry.updatedAt,
+    date: createdAt,
+    createdAt,
+    revisedAt,
     heroImage: entry.pic || null,
   }
 }
 
 const mapContentlayerToListItem = (entry: CoreContent<Blog>): BlogListItem => {
-  const publishedAt = entry.date
+  const createdAt = entry.date
+  const revisedAt = entry.lastmod
   return {
     slug: entry.slug,
     title: entry.title,
     summary: entry.summary || '',
     tags: entry.tags || [],
-    date: publishedAt,
-    publishedAt,
-    updatedAt: entry.lastmod,
+    date: createdAt,
+    createdAt,
+    revisedAt,
     heroImage: Array.isArray(entry.images) ? entry.images[0] : entry.images || null,
   }
 }

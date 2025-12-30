@@ -156,7 +156,7 @@ export default function ListLayoutWithTags({
               {displayPosts.map((post) => {
                 const {
                   slug: postSlug,
-                  publishedAt,
+                  createdAt,
                   title: postTitle,
                   summary,
                   tags,
@@ -203,11 +203,11 @@ export default function ListLayoutWithTags({
                         </div>
                         <div className="flex items-center justify-between text-base leading-6 font-medium">
                           <time
-                            dateTime={publishedAt}
+                            dateTime={createdAt}
                             suppressHydrationWarning
                             className="text-gray-500 dark:text-gray-400"
                           >
-                            {formatDateYMD(publishedAt)}
+                            {formatDateYMD(createdAt)}
                           </time>
                           <Link
                             href={`/blog/${postSlug}`}

@@ -25,8 +25,7 @@ interface MicroCMSPostLayoutProps {
 }
 
 export default function MicroCMSPostLayout({ post, prev, next }: MicroCMSPostLayoutProps) {
-  const { slug, title, tags, publishedAt, updatedAt, contentHtml, heroImage } = post
-  const displayUpdatedAt = updatedAt || publishedAt
+  const { slug, title, tags, createdAt, revisedAt, contentHtml, heroImage } = post
 
   return (
     <SectionContainer>
@@ -37,19 +36,20 @@ export default function MicroCMSPostLayout({ post, prev, next }: MicroCMSPostLay
             <div className="space-y-1 text-center">
               <dl className="space-y-10">
                 <div>
-                  <dt className="sr-only">Published at</dt>
-                  <dt className="sr-only">Updated at</dt>
+                  <dt className="sr-only">Created at</dt>
                   <dd className="text-base leading-6 font-medium text-gray-500 dark:text-gray-400">
                     <div>
-                      <time dateTime={publishedAt}>
-                        {`published at ${formatDateYYMMDD(publishedAt)}`}
+                      <time dateTime={createdAt}>
+                        {`created at ${formatDateYYMMDD(createdAt)}`}
                       </time>
                     </div>
-                    <div>
-                      <time dateTime={displayUpdatedAt}>
-                        {`updated at ${formatDateYYMMDD(displayUpdatedAt)}`}
-                      </time>
-                    </div>
+                    {revisedAt ? (
+                      <div>
+                        <time dateTime={revisedAt}>
+                          {`revised at ${formatDateYYMMDD(revisedAt)}`}
+                        </time>
+                      </div>
+                    ) : null}
                   </dd>
                 </div>
               </dl>
