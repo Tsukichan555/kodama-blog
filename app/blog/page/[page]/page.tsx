@@ -1,8 +1,21 @@
+import { genPageMetadata } from 'app/seo'
 import ListLayout from '@/layouts/ListLayoutWithTags'
 import { notFound } from 'next/navigation'
 import { getAllPosts, getTagCounts } from '@/lib/posts'
 
 const POSTS_PER_PAGE = 5
+
+export async function generateMetadata(props: { params: Promise<{ page: string }> }) {
+  const params = await props.params
+  const pageNumber = parseInt(params.page as string)
+  const isFirstPage = pageNumber === 1
+  const path = isFirstPage ? '/blog' : `/blog/page/${pageNumber}`
+
+  return genPageMetadata({
+    title: isFirstPage ? 'Blog' : `Blog - Page ${pageNumber}`,
+    path,
+  })
+}
 
 export const generateStaticParams = async () => {
   const posts = await getAllPosts()

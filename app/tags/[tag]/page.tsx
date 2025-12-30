@@ -1,7 +1,7 @@
 import { slug } from 'github-slugger'
 import siteMetadata from '@/data/siteMetadata'
 import ListLayout from '@/layouts/ListLayoutWithTags'
-import { genPageMetadata } from 'app/seo'
+import { buildCanonicalUrl, genPageMetadata } from 'app/seo'
 import { Metadata } from 'next'
 import { getAllPosts, getTagCounts } from '@/lib/posts'
 
@@ -12,13 +12,15 @@ export async function generateMetadata(props: {
 }): Promise<Metadata> {
   const params = await props.params
   const tag = decodeURI(params.tag)
+  const tagSlug = slug(tag)
+  const path = `/tags/${tagSlug}`
   return genPageMetadata({
     title: tag,
     description: `${siteMetadata.title} ${tag} tagged content`,
+    path,
     alternates: {
-      canonical: './',
       types: {
-        'application/rss+xml': `${siteMetadata.siteUrl}/tags/${tag}/feed.xml`,
+        'application/rss+xml': buildCanonicalUrl(`${path}/feed.xml`),
       },
     },
   })

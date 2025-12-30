@@ -4,7 +4,11 @@ import { slug } from 'github-slugger'
 import { genPageMetadata } from 'app/seo'
 import { getAllPosts, getTagCounts } from '@/lib/posts'
 
-export const metadata = genPageMetadata({ title: 'Tags', description: 'Things I blog about' })
+export const metadata = genPageMetadata({
+  title: 'Tags',
+  description: 'Things I blog about',
+  path: '/tags',
+})
 
 export default async function Page() {
   const posts = await getAllPosts()

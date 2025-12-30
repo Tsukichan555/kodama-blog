@@ -6,7 +6,7 @@ import PageTitle from '@/components/PageTitle'
 import { genPageMetadata } from 'app/seo'
 import { getAboutContent } from '@/lib/posts'
 
-export const metadata = genPageMetadata({ title: 'About' })
+export const metadata = genPageMetadata({ title: 'About', path: '/about' })
 
 export default async function Page() {
   const data = await getAboutContent()

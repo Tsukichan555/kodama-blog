@@ -4,7 +4,7 @@ import { getAllPosts, getTagCounts } from '@/lib/posts'
 
 const POSTS_PER_PAGE = 5
 
-export const metadata = genPageMetadata({ title: 'Blog' })
+export const metadata = genPageMetadata({ title: 'Blog', path: '/blog' })
 
 export default async function BlogPage() {
   const posts = await getAllPosts()

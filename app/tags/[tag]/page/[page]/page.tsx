@@ -1,9 +1,31 @@
+import siteMetadata from '@/data/siteMetadata'
 import { slug } from 'github-slugger'
 import ListLayout from '@/layouts/ListLayoutWithTags'
 import { notFound } from 'next/navigation'
+import { buildCanonicalUrl, genPageMetadata } from 'app/seo'
 import { getAllPosts, getTagCounts } from '@/lib/posts'
 
 const POSTS_PER_PAGE = 5
+
+export async function generateMetadata(props: { params: Promise<{ tag: string; page: string }> }) {
+  const params = await props.params
+  const tag = decodeURI(params.tag)
+  const tagSlug = slug(tag)
+  const pageNumber = parseInt(params.page)
+  const isFirstPage = pageNumber === 1
+  const path = isFirstPage ? `/tags/${tagSlug}` : `/tags/${tagSlug}/page/${pageNumber}`
+
+  return genPageMetadata({
+    title: isFirstPage ? tag : `${tag} - Page ${pageNumber}`,
+    description: `${siteMetadata.title} ${tag} tagged content`,
+    path,
+    alternates: {
+      types: {
+        'application/rss+xml': buildCanonicalUrl(`/tags/${tagSlug}/feed.xml`),
+      },
+    },
+  })
+}
 
 export const generateStaticParams = async () => {
   const posts = await getAllPosts()

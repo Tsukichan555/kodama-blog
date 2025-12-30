@@ -14,6 +14,7 @@ import siteMetadata from '@/data/siteMetadata'
 import { notFound } from 'next/navigation'
 import MicroCMSPostLayout from '@/layouts/MicroCMSPostLayout'
 import { getAllPosts, getPostBySlug } from '@/lib/posts'
+import { buildCanonicalUrl } from 'app/seo'
 
 const defaultLayout = 'PostLayout'
 const layouts = {
@@ -31,6 +32,7 @@ export async function generateMetadata(props: {
   if (!postResult) {
     return
   }
+  const canonicalUrl = buildCanonicalUrl(`/blog/${slug}`)
 
   if (postResult.source === 'microcms') {
     const { post } = postResult
@@ -43,6 +45,9 @@ export async function generateMetadata(props: {
     return {
       title: post.title,
       description,
+      alternates: {
+        canonical: canonicalUrl,
+      },
       openGraph: {
         title: post.title,
         description,
@@ -51,7 +56,7 @@ export async function generateMetadata(props: {
         type: 'article',
         publishedTime: publishedAt,
         modifiedTime: modifiedAt,
-        url: './',
+        url: canonicalUrl,
         images: ogImages,
         authors: [siteMetadata.author],
       },
@@ -81,6 +86,9 @@ export async function generateMetadata(props: {
   return {
     title: post.title,
     description: post.summary,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title: post.title,
       description: post.summary,
@@ -89,7 +97,7 @@ export async function generateMetadata(props: {
       type: 'article',
       publishedTime: publishedAt,
       modifiedTime: modifiedAt,
-      url: './',
+      url: canonicalUrl,
       images: ogImages,
       authors: authorsList.length > 0 ? authorsList : [siteMetadata.author],
     },
