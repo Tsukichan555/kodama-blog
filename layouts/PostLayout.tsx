@@ -15,11 +15,15 @@ const editUrl = (path) => `${siteMetadata.siteRepo}/blob/main/data/${path}`
 const discussUrl = (path) =>
   `https://mobile.twitter.com/search?q=${encodeURIComponent(`${siteMetadata.siteUrl}/${path}`)}`
 
-const postDateTemplate: Intl.DateTimeFormatOptions = {
-  weekday: 'long',
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
+const formatDateYYMMDD = (value: string) => {
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) {
+    return value
+  }
+  const year = String(date.getFullYear()).slice(-2)
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}/${month}/${day}`
 }
 
 interface LayoutProps {
@@ -31,7 +35,9 @@ interface LayoutProps {
 }
 
 export default function PostLayout({ content, authorDetails, next, prev, children }: LayoutProps) {
-  const { filePath, path, slug, date, title, tags } = content
+  const { filePath, path, slug, date, lastmod, title, tags } = content
+  const publishedAt = date
+  const updatedAt = lastmod || date
   const basePath = path.split('/')[0]
 
   return (
@@ -43,11 +49,19 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
             <div className="space-y-1 text-center">
               <dl className="space-y-10">
                 <div>
-                  <dt className="sr-only">Published on</dt>
+                  <dt className="sr-only">Published at</dt>
+                  <dt className="sr-only">Updated at</dt>
                   <dd className="text-base leading-6 font-medium text-gray-500 dark:text-gray-400">
-                    <time dateTime={date}>
-                      {new Date(date).toLocaleDateString(siteMetadata.locale, postDateTemplate)}
-                    </time>
+                    <div>
+                      <time dateTime={publishedAt}>
+                        {`published at ${formatDateYYMMDD(publishedAt)}`}
+                      </time>
+                    </div>
+                    <div>
+                      <time dateTime={updatedAt}>
+                        {`updated at ${formatDateYYMMDD(updatedAt)}`}
+                      </time>
+                    </div>
                   </dd>
                 </div>
               </dl>

@@ -47,11 +47,12 @@ export interface BlogListItem {
   summary: string
   tags: string[]
   date: string
+  publishedAt: string
+  updatedAt?: string
   heroImage?: MicroCMSMedia | string | null
 }
 
 export interface MicroCMSBlogDetail extends BlogListItem {
-  updatedAt?: string
   contentHtml: string
   heroImage?: MicroCMSMedia | null
 }
@@ -94,23 +95,33 @@ const parseTags = (value: string) =>
     .map((tag) => tag.trim())
     .filter(Boolean)
 
-const mapMicroCMSToListItem = (entry: MicroCMSBlogEntry): BlogListItem => ({
-  slug: entry.id,
-  title: entry.title,
-  summary: buildSummary(entry.maincontent || ''),
-  tags: parseTags(entry.tags || ''),
-  date: entry.publishedAt || entry.createdAt,
-  heroImage: entry.pic || null,
-})
+const mapMicroCMSToListItem = (entry: MicroCMSBlogEntry): BlogListItem => {
+  const publishedAt = entry.publishedAt || entry.createdAt
+  return {
+    slug: entry.id,
+    title: entry.title,
+    summary: buildSummary(entry.maincontent || ''),
+    tags: parseTags(entry.tags || ''),
+    date: publishedAt,
+    publishedAt,
+    updatedAt: entry.updatedAt,
+    heroImage: entry.pic || null,
+  }
+}
 
-const mapContentlayerToListItem = (entry: CoreContent<Blog>): BlogListItem => ({
-  slug: entry.slug,
-  title: entry.title,
-  summary: entry.summary || '',
-  tags: entry.tags || [],
-  date: entry.date,
-  heroImage: Array.isArray(entry.images) ? entry.images[0] : entry.images || null,
-})
+const mapContentlayerToListItem = (entry: CoreContent<Blog>): BlogListItem => {
+  const publishedAt = entry.date
+  return {
+    slug: entry.slug,
+    title: entry.title,
+    summary: entry.summary || '',
+    tags: entry.tags || [],
+    date: publishedAt,
+    publishedAt,
+    updatedAt: entry.lastmod,
+    heroImage: Array.isArray(entry.images) ? entry.images[0] : entry.images || null,
+  }
+}
 
 export const getAllPosts = cache(async (): Promise<BlogListItem[]> => {
   if (isMicroCMSEnabled()) {
@@ -146,7 +157,6 @@ export const getPostBySlug = cache(async (slug: string): Promise<PostDetailResul
         post: {
           ...mapMicroCMSToListItem(entry),
           contentHtml: entry.maincontent,
-          updatedAt: entry.updatedAt,
           heroImage: entry.pic || null,
         },
       }
@@ -219,7 +229,6 @@ export const getDraftPost = async (params: MicroCMSDraftParams): Promise<DraftPr
     const post: MicroCMSBlogDetail = {
       ...mapMicroCMSToListItem(entry),
       contentHtml: entry.maincontent,
-      updatedAt: entry.updatedAt,
       heroImage: entry.pic || null,
     }
     return {

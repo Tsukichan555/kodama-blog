@@ -44,7 +44,7 @@ export default function Home({ posts }: { posts: BlogListItem[] }) {
         <ul className="divide-y divide-gray-200 dark:divide-gray-700">
           {!posts.length && 'No posts found.'}
           {posts.slice(0, MAX_DISPLAY).map((post) => {
-            const { slug, date, title, summary, tags, heroImage } = post
+            const { slug, publishedAt, title, summary, tags, heroImage } = post
             const imageUrl = getHeroImageUrl(heroImage)
             return (
               <li key={slug} className="py-12">
@@ -91,8 +91,8 @@ export default function Home({ posts }: { posts: BlogListItem[] }) {
                         </div>
                       </div>
                       <div className="flex items-center justify-between text-base leading-6 font-medium">
-                        <time dateTime={date} className="text-gray-500 dark:text-gray-400">
-                          {formatDateYMD(date)}
+                        <time dateTime={publishedAt} className="text-gray-500 dark:text-gray-400">
+                          {formatDateYMD(publishedAt)}
                         </time>
                         <Link
                           href={`/blog/${slug}`}

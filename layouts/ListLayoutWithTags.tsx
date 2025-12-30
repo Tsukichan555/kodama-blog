@@ -154,7 +154,14 @@ export default function ListLayoutWithTags({
           <div>
             <ul>
               {displayPosts.map((post) => {
-                const { slug: postSlug, date, title: postTitle, summary, tags, heroImage } = post
+                const {
+                  slug: postSlug,
+                  publishedAt,
+                  title: postTitle,
+                  summary,
+                  tags,
+                  heroImage,
+                } = post
                 const imageUrl = getHeroImageUrl(heroImage)
                 return (
                   <li key={postSlug} className="py-5">
@@ -196,11 +203,11 @@ export default function ListLayoutWithTags({
                         </div>
                         <div className="flex items-center justify-between text-base leading-6 font-medium">
                           <time
-                            dateTime={date}
+                            dateTime={publishedAt}
                             suppressHydrationWarning
                             className="text-gray-500 dark:text-gray-400"
                           >
-                            {formatDateYMD(date)}
+                            {formatDateYMD(publishedAt)}
                           </time>
                           <Link
                             href={`/blog/${postSlug}`}

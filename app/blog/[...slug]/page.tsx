@@ -37,8 +37,8 @@ export async function generateMetadata(props: {
   if (postResult.source === 'microcms') {
     const { post } = postResult
     const description = post.summary || siteMetadata.description
-    const publishedAt = new Date(post.date).toISOString()
-    const modifiedAt = new Date(post.updatedAt || post.date).toISOString()
+    const publishedAt = new Date(post.publishedAt).toISOString()
+    const modifiedAt = new Date(post.updatedAt || post.publishedAt).toISOString()
     const imageList = post.heroImage?.url ? [post.heroImage.url] : [siteMetadata.socialBanner]
     const ogImages = imageList.map((img) => ({ url: img }))
 

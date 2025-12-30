@@ -1,14 +1,23 @@
 import { ReactNode } from 'react'
-import { formatDate } from 'pliny/utils/formatDate'
 import { CoreContent } from 'pliny/utils/contentlayer'
 import type { Blog } from 'contentlayer/generated'
 //import Comments from '@/components/Comments'
 import Link from '@/components/Link'
 import PageTitle from '@/components/PageTitle'
 import SectionContainer from '@/components/SectionContainer'
-import siteMetadata from '@/data/siteMetadata'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 import AirplaneIcon from '@/components/AirplaneIcon'
+
+const formatDateYYMMDD = (value: string) => {
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) {
+    return value
+  }
+  const year = String(date.getFullYear()).slice(-2)
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}/${month}/${day}`
+}
 
 interface LayoutProps {
   content: CoreContent<Blog>
@@ -18,7 +27,9 @@ interface LayoutProps {
 }
 
 export default function PostLayout({ content, next, prev, children }: LayoutProps) {
-  const { path, slug, date, title } = content
+  const { path, slug, date, lastmod, title } = content
+  const publishedAt = date
+  const updatedAt = lastmod || date
 
   return (
     <SectionContainer>
@@ -29,9 +40,19 @@ export default function PostLayout({ content, next, prev, children }: LayoutProp
             <div className="space-y-1 border-b border-gray-200 pb-10 text-center dark:border-gray-700">
               <dl>
                 <div>
-                  <dt className="sr-only">Published on</dt>
+                  <dt className="sr-only">Published at</dt>
+                  <dt className="sr-only">Updated at</dt>
                   <dd className="text-base leading-6 font-medium text-gray-500 dark:text-gray-400">
-                    <time dateTime={date}>{formatDate(date, siteMetadata.locale)}</time>
+                    <div>
+                      <time dateTime={publishedAt}>
+                        {`published at ${formatDateYYMMDD(publishedAt)}`}
+                      </time>
+                    </div>
+                    <div>
+                      <time dateTime={updatedAt}>
+                        {`updated at ${formatDateYYMMDD(updatedAt)}`}
+                      </time>
+                    </div>
                   </dd>
                 </div>
               </dl>
