@@ -4,6 +4,7 @@ import siteMetadata from '@/data/siteMetadata'
 import { type BlogListItem } from '@/lib/posts'
 import Image from '@/components/Image'
 import AirplaneIcon from '@/components/AirplaneIcon'
+import { Plane } from 'lucide-react'
 
 const MAX_DISPLAY = 5
 
@@ -50,8 +51,8 @@ export default function Home({ posts }: { posts: BlogListItem[] }) {
                 <article>
                   <div className="space-y-2 xl:grid xl:grid-cols-4 xl:items-stretch xl:space-y-0">
                     <div className="pr-4">
-                      <div className="relative aspect-[4/3] w-full overflow-hidden xl:aspect-auto xl:h-full">
-                        {imageUrl ? (
+                      <div className="relative aspect-4/3 w-full overflow-hidden xl:aspect-auto xl:h-full">
+                        {/* {imageUrl ? (
                           <Image
                             src={imageUrl}
                             alt={title}
@@ -59,10 +60,12 @@ export default function Home({ posts }: { posts: BlogListItem[] }) {
                             sizes="(min-width: 1280px) 25vw, 100vw"
                             className="object-cover"
                           />
-                        ) : (
-                          <div className="h-full w-full bg-gray-100 dark:bg-gray-800" />
-                        )}
-                        <div className="pointer-events-none absolute inset-0 bg-black/20" />
+                        ) : ( */}
+                        <div className="flex h-full w-full items-center justify-center bg-linear-to-b from-[#C7C8CA99] to-[#C7C8CA20]">
+                          <Plane className="opacity-30" />
+                        </div>
+
+                        <div className="pointer-events-none absolute inset-0" />
                       </div>
                     </div>
                     <div className="space-y-5 xl:col-span-3">
