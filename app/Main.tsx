@@ -52,7 +52,7 @@ export default function Home({ posts }: { posts: BlogListItem[] }) {
                   <div className="space-y-2 xl:grid xl:grid-cols-4 xl:items-stretch xl:space-y-0">
                     <div className="pr-4">
                       <div className="relative aspect-4/3 w-full overflow-hidden xl:aspect-auto xl:h-full">
-                        {/* {imageUrl ? (
+                        {imageUrl ? (
                           <Image
                             src={imageUrl}
                             alt={title}
@@ -60,10 +60,11 @@ export default function Home({ posts }: { posts: BlogListItem[] }) {
                             sizes="(min-width: 1280px) 25vw, 100vw"
                             className="object-cover"
                           />
-                        ) : ( */}
-                        <div className="flex h-full w-full items-center justify-center bg-linear-to-b from-[#C7C8CA99] to-[#C7C8CA20]">
-                          <Plane className="opacity-30" />
-                        </div>
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center bg-linear-to-b from-[#C7C8CA99] to-[#C7C8CA20]">
+                            <Plane className="opacity-30" />
+                          </div>
+                        )}
 
                         <div className="pointer-events-none absolute inset-0" />
                       </div>
