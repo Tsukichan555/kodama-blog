@@ -9,6 +9,7 @@ import Image from '@/components/Image'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
+import AirplaneIcon from '@/components/AirplaneIcon'
 
 const editUrl = (path) => `${siteMetadata.siteRepo}/blob/main/data/${path}`
 const discussUrl = (path) =>
@@ -153,10 +154,10 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
               <div className="pt-4 xl:pt-8">
                 <Link
                   href={`/${basePath}`}
-                  className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                  className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400 flex flex-row gap-2"
                   aria-label="Back to the blog"
                 >
-                  &larr; Back to the blog
+                  <AirplaneIcon direction="left" /> Back to the blog
                 </Link>
               </div>
             </footer>

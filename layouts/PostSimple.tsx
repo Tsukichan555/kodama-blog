@@ -8,6 +8,7 @@ import PageTitle from '@/components/PageTitle'
 import SectionContainer from '@/components/SectionContainer'
 import siteMetadata from '@/data/siteMetadata'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
+import AirplaneIcon from '@/components/AirplaneIcon'
 
 interface LayoutProps {
   content: CoreContent<Blog>
@@ -54,10 +55,10 @@ export default function PostLayout({ content, next, prev, children }: LayoutProp
                   <div className="pt-4 xl:pt-8">
                     <Link
                       href={`/${prev.path}`}
-                      className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                      className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400 flex flex-row gap-2"
                       aria-label={`Previous post: ${prev.title}`}
                     >
-                      &larr; {prev.title}
+                      <AirplaneIcon direction="left" /> {prev.title}
                     </Link>
                   </div>
                 )}

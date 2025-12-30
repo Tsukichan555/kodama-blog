@@ -6,6 +6,7 @@ import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 //import Comments from '@/components/Comments'
 import Image from '@/components/Image'
 import type { BlogListItem, MicroCMSBlogDetail } from '@/lib/posts'
+import AirplaneIcon from '@/components/AirplaneIcon'
 
 const postDateTemplate: Intl.DateTimeFormatOptions = {
   weekday: 'long',
@@ -117,10 +118,10 @@ export default function MicroCMSPostLayout({ post, prev, next }: MicroCMSPostLay
               <div className="pt-6">
                 <Link
                   href="/blog"
-                  className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                  className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400 flex flex-row gap-2"
                   aria-label="Back to the blog"
                 >
-                  &larr; Back to the blog
+                  <AirplaneIcon direction="left" /> Back to the blog
                 </Link>
               </div>
             </aside>
