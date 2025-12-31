@@ -16,7 +16,7 @@ const Header = () => {
     <header className={headerClass}>
       <Link href="/" aria-label={siteMetadata.headerTitle}>
         <div className="flex items-start justify-between">
-          <div className="mr-3 text-[oklch(55.3%_0.195_38.402)]">
+          <div className="mr-3 text-orange-700 dark:text-orange-500">
             <Plane
               className="mb-0 h-8 w-8 pt-1 pb-0"
               fill="currentColor"

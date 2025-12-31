@@ -6,6 +6,8 @@ import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 import Image from '@/components/Image'
 import type { BlogListItem, MicroCMSBlogDetail } from '@/lib/posts'
 import AirplaneIcon from '@/components/AirplaneIcon'
+import siteMetadata from '@/data/siteMetadata'
+import Comments from '@/components/Comments'
 
 const formatDateYYMMDD = (value: string) => {
   const date = new Date(value)
@@ -77,14 +79,14 @@ export default function MicroCMSPostLayout({ post, prev, next }: MicroCMSPostLay
               ) : (
                 <div className="prose dark:prose-invert max-w-none pt-10 pb-8" />
               )}
-              {/* {siteMetadata.comments && (
+              {siteMetadata.comments && (
                 <div
                   className="pt-6 pb-6 text-center text-gray-700 dark:text-gray-300"
                   id="comment"
                 >
                   <Comments slug={slug} />
                 </div>
-              )} */}
+              )}
             </div>
             <aside className="xl:col-start-4 xl:row-span-2 xl:pt-10">
               {tags.length > 0 && (
