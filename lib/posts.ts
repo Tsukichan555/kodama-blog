@@ -28,7 +28,7 @@ interface MicroCMSBlogEntry {
   pic?: MicroCMSMedia
   publishedAt?: string
   revisedAt?: string
-  overwroteCreatedAt?: string
+  overwrotePublishedAt?: string
   createdAt: string
   updatedAt: string
 }
@@ -97,8 +97,15 @@ const parseTags = (value: string) =>
     .filter(Boolean)
 
 const mapMicroCMSToListItem = (entry: MicroCMSBlogEntry): BlogListItem => {
-  const createdAt = entry.overwroteCreatedAt ?? entry.createdAt
-  const revisedAt = entry.overwroteCreatedAt ? undefined : entry.revisedAt || entry.updatedAt
+  const createdAt = entry.overwrotePublishedAt ?? entry.createdAt
+  const revisedAt = entry.overwrotePublishedAt ? undefined : entry.revisedAt || entry.updatedAt
+
+  //debug
+  console.log('createdAt:', createdAt)
+  console.log('revisedAt:', revisedAt)
+  console.log('overwrotePublishedAt:', entry.overwrotePublishedAt)
+  console.log('entry:', entry)
+
   return {
     slug: entry.id,
     title: entry.title,
