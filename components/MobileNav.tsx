@@ -5,6 +5,7 @@ import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'bo
 import { Fragment, useState, useEffect, useRef } from 'react'
 import Link from './Link'
 import headerNavLinks from '@/data/headerNavLinks'
+import { ExternalLink } from 'lucide-react'
 
 const MobileNav = () => {
   const [navShow, setNavShow] = useState(false)
@@ -82,6 +83,14 @@ const MobileNav = () => {
                     {link.title}
                   </Link>
                 ))}
+                <Link
+                  href="mailto:&#x6C;&#x6F;&#x63;&#x6B;&#x68;&#x6F;&#x64;&#x61;&#x2E;&#x6D;&#x61;&#x72;&#x74;&#x69;&#x6E;&#x40;&#x67;&#x6D;&#x61;&#x69;&#x6C;&#x2E;&#x63;&#x6F;&#x6D;"
+                  className="hover:text-primary-500 dark:hover:text-primary-400 mb-4 flex flex-row items-center gap-2 py-2 pr-4 text-2xl font-bold tracking-widest text-gray-900 outline outline-0 dark:text-gray-100"
+                  onClick={onToggleNav}
+                >
+                  <span>Contact</span>
+                  <ExternalLink className="h-5 w-5" />
+                </Link>
               </nav>
 
               <button

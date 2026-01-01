@@ -46,6 +46,12 @@ const Header = () => {
                 {link.title}
               </Link>
             ))}
+          <Link
+            href="mailto:&#x6C;&#x6F;&#x63;&#x6B;&#x68;&#x6F;&#x64;&#x61;&#x2E;&#x6D;&#x61;&#x72;&#x74;&#x69;&#x6E;&#x40;&#x67;&#x6D;&#x61;&#x69;&#x6C;&#x2E;&#x63;&#x6F;&#x6D;"
+            className="hover:text-primary-500 dark:hover:text-primary-400 m-1 font-medium text-gray-900 underline dark:text-gray-100"
+          >
+            Contact
+          </Link>
         </div>
         <SearchButton />
         <ThemeSwitch />
