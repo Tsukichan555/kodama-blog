@@ -100,12 +100,6 @@ const mapMicroCMSToListItem = (entry: MicroCMSBlogEntry): BlogListItem => {
   const createdAt = entry.overwrotePublishedAt ?? entry.createdAt
   const revisedAt = entry.overwrotePublishedAt ? undefined : entry.revisedAt || entry.updatedAt
 
-  //debug
-  console.log('createdAt:', createdAt)
-  console.log('revisedAt:', revisedAt)
-  console.log('overwrotePublishedAt:', entry.overwrotePublishedAt)
-  console.log('entry:', entry)
-
   return {
     slug: entry.id,
     title: entry.title,
