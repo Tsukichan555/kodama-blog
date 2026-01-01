@@ -1,7 +1,8 @@
 import Main from './Main'
-import { getAllPosts } from '@/lib/posts'
+import { getAllPosts, getAboutContent } from '@/lib/posts'
 
 export default async function Page() {
   const posts = await getAllPosts()
-  return <Main posts={posts} />
+  const aboutData = await getAboutContent()
+  return <Main posts={posts} about={aboutData} />
 }

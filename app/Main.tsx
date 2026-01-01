@@ -1,12 +1,13 @@
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
-import { type BlogListItem } from '@/lib/posts'
+import { type AboutContentResult, type BlogListItem } from '@/lib/posts'
 import Image from '@/components/Image'
 import AirplaneIcon from '@/components/AirplaneIcon'
 import { Plane } from 'lucide-react'
 
 const MAX_DISPLAY = 5
+const MAX_DESC_LENGTH = 86
 
 const formatDateYMD = (value: string) => {
   const date = new Date(value)
@@ -29,7 +30,49 @@ const getHeroImageUrl = (heroImage?: BlogListItem['heroImage']) => {
   return heroImage.url || null
 }
 
-export default function Home({ posts }: { posts: BlogListItem[] }) {
+const stripHtml = (value: string) => value.replace(/<[^>]*>/g, ' ')
+
+const stripMarkdown = (value: string) =>
+  value
+    .replace(/!\[[^\]]*]\([^)]*\)/g, ' ')
+    .replace(/\[[^\]]*]\([^)]*\)/g, ' ')
+    .replace(/`{1,3}[\s\S]*?`{1,3}/g, ' ')
+    .replace(/[#>*_~=-]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+
+const toPlainText = (value: string) => stripMarkdown(stripHtml(value))
+
+const takeChars = (value: string, max: number) => {
+  const chars = Array.from(value)
+  if (chars.length <= max) {
+    return { text: value, truncated: false }
+  }
+  return { text: chars.slice(0, max).join(''), truncated: true }
+}
+
+const getAboutSource = (about?: AboutContentResult) => {
+  if (!about) {
+    return ''
+  }
+  if (about.source === 'microcms') {
+    return about.contentHtml || ''
+  }
+  return about.author?.body?.raw || ''
+}
+
+export default function Home({
+  posts,
+  about,
+}: {
+  posts: BlogListItem[]
+  about: AboutContentResult
+}) {
+  const aboutSource = getAboutSource(about)
+  const plainAbout = toPlainText(aboutSource)
+  const { text, truncated } = takeChars(plainAbout, MAX_DESC_LENGTH)
+  const description = text ? (truncated ? `${text}...` : text) : siteMetadata.description
+
   return (
     <>
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -38,7 +81,13 @@ export default function Home({ posts }: { posts: BlogListItem[] }) {
             Lockhoda Martin
           </h1>
           <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">
-            {siteMetadata.description}
+            {description}
+            <Link
+              href="/about"
+              className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400 ml-1 font-medium underline"
+            >
+              Read more
+            </Link>
           </p>
         </div>
         <ul className="divide-y divide-gray-200 dark:divide-gray-700">

@@ -62,6 +62,10 @@ type PostDetailResult =
   | { source: 'microcms'; post: MicroCMSBlogDetail }
   | { source: 'contentlayer'; post: Blog; authors: CoreContent<Authors>[] }
 
+export type AboutContentResult =
+  | { source: 'microcms'; contentHtml: string }
+  | { source: 'contentlayer'; author: Authors; content: CoreContent<Authors> }
+
 const stripHtml = (value: string) =>
   value
     .replace(/<[^>]*>/g, '')
@@ -189,7 +193,7 @@ export const getPostBySlug = cache(async (slug: string): Promise<PostDetailResul
   }
 })
 
-export const getAboutContent = cache(async () => {
+export const getAboutContent = cache(async (): Promise<AboutContentResult> => {
   if (isMicroCMSEnabled()) {
     try {
       const response =
