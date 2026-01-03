@@ -7,7 +7,7 @@ const siteMetadata = {
     process.env.NEXT_PUBLIC_SITE_DESCRIPTION || 'A blog created with Next.js and Tailwind.css',
   language: process.env.NEXT_PUBLIC_SITE_LANGUAGE || 'en-us',
   theme: process.env.NEXT_PUBLIC_SITE_THEME || 'dark', // system, dark or light
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'https://tailwind-nextjs-starter-blog.vercel.app',
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'https://lockhoda-martin.vercel.app',
   siteRepo:
     process.env.NEXT_PUBLIC_SITE_REPOSITORY ||
     'https://github.com/timlrx/tailwind-nextjs-starter-blog',
