@@ -7,13 +7,13 @@ import { getAllPosts, getTagCounts } from '@/lib/posts'
 
 const POSTS_PER_PAGE = 5
 
-export async function generateMetadata(props: { params: Promise<{ tag: string; page: string }> }) {
+export async function generateMetadata(props: { params: Promise<{ project: string; page: string }> }) {
   const params = await props.params
-  const tag = decodeURI(params.tag)
+  const tag = decodeURI(params.project)
   const tagSlug = slug(tag)
   const pageNumber = parseInt(params.page)
   const isFirstPage = pageNumber === 1
-  const path = isFirstPage ? `/tags/${tagSlug}` : `/tags/${tagSlug}/page/${pageNumber}`
+  const path = isFirstPage ? `/projects/${tagSlug}` : `/projects/${tagSlug}/page/${pageNumber}`
 
   return genPageMetadata({
     title: isFirstPage ? tag : `${tag} - Page ${pageNumber}`,
@@ -21,7 +21,7 @@ export async function generateMetadata(props: { params: Promise<{ tag: string; p
     path,
     alternates: {
       types: {
-        'application/rss+xml': buildCanonicalUrl(`/tags/${tagSlug}/feed.xml`),
+        'application/rss+xml': buildCanonicalUrl(`/projects/${tagSlug}/feed.xml`),
       },
     },
   })
@@ -34,15 +34,15 @@ export const generateStaticParams = async () => {
     const postCount = tagCounts[tag]
     const totalPages = Math.max(1, Math.ceil(postCount / POSTS_PER_PAGE))
     return Array.from({ length: totalPages }, (_, i) => ({
-      tag: encodeURI(tag),
+      project: encodeURI(tag),
       page: (i + 1).toString(),
     }))
   })
 }
 
-export default async function TagPage(props: { params: Promise<{ tag: string; page: string }> }) {
+export default async function TagPage(props: { params: Promise<{ project: string; page: string }> }) {
   const params = await props.params
-  const tag = decodeURI(params.tag)
+  const tag = decodeURI(params.project)
   const title = tag[0].toUpperCase() + tag.split(' ').join('-').slice(1)
   const pageNumber = parseInt(params.page)
   const posts = await getAllPosts()
