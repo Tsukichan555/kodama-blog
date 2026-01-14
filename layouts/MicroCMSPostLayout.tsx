@@ -92,7 +92,7 @@ export default function MicroCMSPostLayout({ post, prev, next }: MicroCMSPostLay
               {tags.length > 0 && (
                 <div className="pb-6">
                   <h2 className="text-xs tracking-wide text-gray-500 uppercase dark:text-gray-400">
-                    Tags
+                    Projects
                   </h2>
                   <div className="flex flex-wrap pt-2">
                     {tags.map((tag) => (
