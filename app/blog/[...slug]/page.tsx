@@ -39,8 +39,10 @@ export async function generateMetadata(props: {
     const description = post.summary || siteMetadata.description
     const createdAt = new Date(post.createdAt).toISOString()
     const revisedAt = new Date(post.revisedAt || post.createdAt).toISOString()
-    const imageList = post.heroImage?.url ? [post.heroImage.url] : [siteMetadata.socialBanner]
-    const ogImages = imageList.map((img) => ({ url: img }))
+
+    // Only set explicit images if hero image exists, otherwise use opengraph-image.tsx
+    const imageList = post.heroImage?.url ? [post.heroImage.url] : undefined
+    const ogImages = imageList ? imageList.map((img) => ({ url: img })) : undefined
 
     return {
       title: post.title,
@@ -57,14 +59,14 @@ export async function generateMetadata(props: {
         publishedTime: createdAt,
         modifiedTime: revisedAt,
         url: canonicalUrl,
-        images: ogImages,
+        ...(ogImages && { images: ogImages }),
         authors: [siteMetadata.author],
       },
       twitter: {
         card: 'summary_large_image',
         title: post.title,
         description,
-        images: imageList,
+        ...(imageList && { images: imageList }),
       },
     }
   }
@@ -73,15 +75,19 @@ export async function generateMetadata(props: {
   const createdAt = new Date(post.date).toISOString()
   const revisedAt = new Date(post.lastmod || post.date).toISOString()
   const authorsList = authors.map((author) => author.name)
-  let imageList = [siteMetadata.socialBanner]
+
+  // Only set explicit images if post has images, otherwise use opengraph-image.tsx
+  let imageList: string[] | undefined = undefined
   if (post.images) {
     imageList = typeof post.images === 'string' ? [post.images] : post.images
   }
-  const ogImages = imageList.map((img) => {
-    return {
-      url: img && img.includes('http') ? img : siteMetadata.siteUrl + img,
-    }
-  })
+  const ogImages = imageList
+    ? imageList.map((img) => {
+        return {
+          url: img && img.includes('http') ? img : siteMetadata.siteUrl + img,
+        }
+      })
+    : undefined
 
   return {
     title: post.title,
@@ -98,14 +104,14 @@ export async function generateMetadata(props: {
       publishedTime: createdAt,
       modifiedTime: revisedAt,
       url: canonicalUrl,
-      images: ogImages,
+      ...(ogImages && { images: ogImages }),
       authors: authorsList.length > 0 ? authorsList : [siteMetadata.author],
     },
     twitter: {
       card: 'summary_large_image',
       title: post.title,
       description: post.summary,
-      images: imageList,
+      ...(imageList && { images: imageList }),
     },
   }
 }

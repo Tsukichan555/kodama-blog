@@ -19,16 +19,22 @@ const space_grotesk = Space_Grotesk({
   variable: '--font-space-grotesk',
 })
 
+// Helper function to truncate description for OGP
+const truncateDescription = (text: string, maxLength: number = 160): string => {
+  if (text.length <= maxLength) return text
+  return text.slice(0, maxLength - 3) + '...'
+}
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteMetadata.siteUrl),
   title: {
     default: siteMetadata.title,
     template: `%s | ${siteMetadata.title}`,
   },
-  description: siteMetadata.description,
+  description: truncateDescription(siteMetadata.description),
   openGraph: {
-    title: siteMetadata.title,
-    description: siteMetadata.description,
+    title: 'Lockhoda Martin',
+    description: truncateDescription(siteMetadata.description),
     url: siteMetadata.siteUrl,
     siteName: siteMetadata.title,
     images: [siteMetadata.socialBanner],
@@ -53,7 +59,7 @@ export const metadata: Metadata = {
     },
   },
   twitter: {
-    title: siteMetadata.title,
+    title: 'Lockhoda Martin',
     card: 'summary_large_image',
     images: [siteMetadata.socialBanner],
   },
