@@ -16,7 +16,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
   const postResult = await getPostBySlug(slug)
 
   if (!postResult) {
-    return new Response('Not found', { status: 404 })
+    return new Response('Blog post not found for OG image generation', { status: 404 })
   }
 
   const post = postResult.source === 'microcms' ? postResult.post : { title: postResult.post.title }
@@ -65,7 +65,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           {/* Favicon */}
           <img
             src={faviconUrl.toString()}
-            alt="favicon"
+            alt="Site logo"
             width={80}
             height={80}
             style={{ marginBottom: '40px' }}
