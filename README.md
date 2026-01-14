@@ -44,7 +44,7 @@ npm run lint    # Lint
 - 主要ページ:
   - `app/about/` About
   - `app/blog/` Blog一覧/詳細
-  - `app/tags/` Tags
+  - `app/projects/` Projects
   - `app/draft/` Draft
 - API: `app/api/`
 - 生成系:
