@@ -1,5 +1,6 @@
 import { ImageResponse } from 'next/og'
 import { getPostBySlug } from '@/lib/posts'
+import siteMetadata from '@/data/siteMetadata'
 
 export const runtime = 'edge'
 export const alt = 'Blog Post'
@@ -20,8 +21,8 @@ export default async function Image({ params }: { params: Promise<{ slug: string
 
   const post = postResult.source === 'microcms' ? postResult.post : { title: postResult.post.title }
 
-  // Load favicon as base64 (we'll need to read it from the file system or use a public URL)
-  const faviconUrl = new URL('/static/favicons/favicon.svg', 'https://lockhoda-martin.vercel.app')
+  // Load favicon from the site URL
+  const faviconUrl = new URL('/static/favicons/favicon.svg', siteMetadata.siteUrl)
 
   return new ImageResponse(
     (
@@ -79,8 +80,6 @@ export default async function Image({ params }: { params: Promise<{ slug: string
               textAlign: 'center',
               lineHeight: 1.2,
               maxWidth: '1000px',
-              display: 'flex',
-              flexWrap: 'wrap',
             }}
           >
             {post.title}

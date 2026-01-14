@@ -12,6 +12,7 @@ import siteMetadata from '@/data/siteMetadata'
 import { ThemeProviders } from './theme-providers'
 import { Metadata } from 'next'
 import Cursor from '@/components/Cursor'
+import { truncateText } from '@/lib/textUtils'
 
 const space_grotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -19,22 +20,16 @@ const space_grotesk = Space_Grotesk({
   variable: '--font-space-grotesk',
 })
 
-// Helper function to truncate description for OGP
-const truncateDescription = (text: string, maxLength: number = 160): string => {
-  if (text.length <= maxLength) return text
-  return text.slice(0, maxLength - 3) + '...'
-}
-
 export const metadata: Metadata = {
   metadataBase: new URL(siteMetadata.siteUrl),
   title: {
     default: siteMetadata.title,
     template: `%s | ${siteMetadata.title}`,
   },
-  description: truncateDescription(siteMetadata.description),
+  description: truncateText(siteMetadata.description),
   openGraph: {
     title: 'Lockhoda Martin',
-    description: truncateDescription(siteMetadata.description),
+    description: truncateText(siteMetadata.description),
     url: siteMetadata.siteUrl,
     siteName: siteMetadata.title,
     images: [siteMetadata.socialBanner],
