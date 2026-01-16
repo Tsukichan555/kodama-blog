@@ -1,25 +1,12 @@
 import { ImageResponse } from 'next/og'
-import { getPostBySlug } from '@/lib/posts'
+import { NextRequest } from 'next/server'
 import siteMetadata from '@/data/siteMetadata'
 
 export const runtime = 'edge'
-export const alt = 'Blog Post'
-export const size = {
-  width: 1200,
-  height: 630,
-}
-export const contentType = 'image/png'
 
-export default async function Image({ params }: { params: Promise<{ slug: string[] }> }) {
-  const resolvedParams = await params
-  const slug = decodeURI(resolvedParams.slug.join('/'))
-  const postResult = await getPostBySlug(slug)
-
-  if (!postResult) {
-    return new Response('Blog post not found for OG image generation', { status: 404 })
-  }
-
-  const post = postResult.source === 'microcms' ? postResult.post : { title: postResult.post.title }
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url)
+  const title = searchParams.get('title') || 'Blog Post'
 
   // Load favicon from the site URL
   const faviconUrl = new URL('/static/favicons/favicon.svg', siteMetadata.siteUrl)
@@ -82,13 +69,14 @@ export default async function Image({ params }: { params: Promise<{ slug: string
               maxWidth: '1000px',
             }}
           >
-            {post.title}
+            {title}
           </div>
         </div>
       </div>
     ),
     {
-      ...size,
+      width: 1200,
+      height: 630,
     }
   )
 }

@@ -40,9 +40,11 @@ export async function generateMetadata(props: {
     const createdAt = new Date(post.createdAt).toISOString()
     const revisedAt = new Date(post.revisedAt || post.createdAt).toISOString()
 
-    // Only set explicit images if hero image exists, otherwise use opengraph-image.tsx
-    const imageList = post.heroImage?.url ? [post.heroImage.url] : undefined
-    const ogImages = imageList ? imageList.map((img) => ({ url: img })) : undefined
+    // Use hero image if available, otherwise use dynamic OG image from API route
+    const imageList = post.heroImage?.url
+      ? [post.heroImage.url]
+      : [`${siteMetadata.siteUrl}/api/og?title=${encodeURIComponent(post.title)}`]
+    const ogImages = imageList.map((img) => ({ url: img }))
 
     return {
       title: post.title,
@@ -59,14 +61,14 @@ export async function generateMetadata(props: {
         publishedTime: createdAt,
         modifiedTime: revisedAt,
         url: canonicalUrl,
-        ...(ogImages && { images: ogImages }),
+        images: ogImages,
         authors: [siteMetadata.author],
       },
       twitter: {
         card: 'summary_large_image',
         title: post.title,
         description,
-        ...(imageList && { images: imageList }),
+        images: imageList,
       },
     }
   }
@@ -76,18 +78,18 @@ export async function generateMetadata(props: {
   const revisedAt = new Date(post.lastmod || post.date).toISOString()
   const authorsList = authors.map((author) => author.name)
 
-  // Only set explicit images if post has images, otherwise use opengraph-image.tsx
-  let imageList: string[] | undefined = undefined
+  // Use post images if available, otherwise use dynamic OG image from API route
+  let imageList: string[]
   if (post.images) {
     imageList = typeof post.images === 'string' ? [post.images] : post.images
+  } else {
+    imageList = [`${siteMetadata.siteUrl}/api/og?title=${encodeURIComponent(post.title)}`]
   }
-  const ogImages = imageList
-    ? imageList.map((img) => {
-        return {
-          url: img && img.includes('http') ? img : siteMetadata.siteUrl + img,
-        }
-      })
-    : undefined
+  const ogImages = imageList.map((img) => {
+    return {
+      url: img && img.includes('http') ? img : siteMetadata.siteUrl + img,
+    }
+  })
 
   return {
     title: post.title,
@@ -104,14 +106,14 @@ export async function generateMetadata(props: {
       publishedTime: createdAt,
       modifiedTime: revisedAt,
       url: canonicalUrl,
-      ...(ogImages && { images: ogImages }),
+      images: ogImages,
       authors: authorsList.length > 0 ? authorsList : [siteMetadata.author],
     },
     twitter: {
       card: 'summary_large_image',
       title: post.title,
       description: post.summary,
-      ...(imageList && { images: imageList }),
+      images: imageList,
     },
   }
 }
