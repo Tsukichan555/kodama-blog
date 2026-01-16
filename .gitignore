@@ -46,6 +46,11 @@ yarn-error.log*
 
 # Contentlayer
 .contentlayer
+.devcontainer
+.github
+.vscode
+.yarn
+.husky
 
 # TypeScript
 *.tsbuildinfo
