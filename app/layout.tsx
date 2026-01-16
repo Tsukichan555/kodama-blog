@@ -12,6 +12,7 @@ import siteMetadata from '@/data/siteMetadata'
 import { ThemeProviders } from './theme-providers'
 import { Metadata } from 'next'
 import Cursor from '@/components/Cursor'
+import { truncateText } from '@/lib/textUtils'
 
 const space_grotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -25,10 +26,10 @@ export const metadata: Metadata = {
     default: siteMetadata.title,
     template: `%s | ${siteMetadata.title}`,
   },
-  description: siteMetadata.description,
+  description: truncateText(siteMetadata.description),
   openGraph: {
-    title: siteMetadata.title,
-    description: siteMetadata.description,
+    title: 'Lockhoda Martin',
+    description: truncateText(siteMetadata.description),
     url: siteMetadata.siteUrl,
     siteName: siteMetadata.title,
     images: [siteMetadata.socialBanner],
@@ -53,7 +54,7 @@ export const metadata: Metadata = {
     },
   },
   twitter: {
-    title: siteMetadata.title,
+    title: 'Lockhoda Martin',
     card: 'summary_large_image',
     images: [siteMetadata.socialBanner],
   },
