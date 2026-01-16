@@ -8,12 +8,12 @@ import { getAllPosts, getTagCounts } from '@/lib/posts'
 const POSTS_PER_PAGE = 5
 
 export async function generateMetadata(props: {
-  params: Promise<{ tag: string }>
+  params: Promise<{ project: string }>
 }): Promise<Metadata> {
   const params = await props.params
-  const tag = decodeURI(params.tag)
+  const tag = decodeURI(params.project)
   const tagSlug = slug(tag)
-  const path = `/tags/${tagSlug}`
+  const path = `/projects/${tagSlug}`
   return genPageMetadata({
     title: tag,
     description: `${siteMetadata.title} ${tag} tagged content`,
@@ -31,13 +31,13 @@ export const generateStaticParams = async () => {
   const tagCounts = getTagCounts(posts)
   const tagKeys = Object.keys(tagCounts)
   return tagKeys.map((tag) => ({
-    tag: encodeURI(tag),
+    project: encodeURI(tag),
   }))
 }
 
-export default async function TagPage(props: { params: Promise<{ tag: string }> }) {
+export default async function TagPage(props: { params: Promise<{ project: string }> }) {
   const params = await props.params
-  const tag = decodeURI(params.tag)
+  const tag = decodeURI(params.project)
   const title = tag[0].toUpperCase() + tag.split(' ').join('-').slice(1)
   const posts = await getAllPosts()
   const filteredPosts = posts.filter(
