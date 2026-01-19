@@ -8,6 +8,7 @@ import type { BlogListItem, MicroCMSBlogDetail } from '@/lib/posts'
 import AirplaneIcon from '@/components/AirplaneIcon'
 import siteMetadata from '@/data/siteMetadata'
 import Comments from '@/components/Comments'
+import MicroCMSCodeEnhancer from '@/components/MicroCMSCodeEnhancer'
 
 const formatDateYYMMDD = (value: string) => {
   const date = new Date(value)
@@ -31,6 +32,7 @@ export default function MicroCMSPostLayout({ post, prev, next }: MicroCMSPostLay
 
   return (
     <SectionContainer>
+      <MicroCMSCodeEnhancer />
       <ScrollTopAndComment />
       <article>
         <div className="xl:divide-y xl:divide-gray-200 xl:dark:divide-gray-700">
