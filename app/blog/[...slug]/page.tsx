@@ -1,4 +1,4 @@
-import 'css/prism.css'
+import 'css/shiki.css'
 import 'katex/dist/katex.css'
 
 import { components } from '@/components/MDXComponents'

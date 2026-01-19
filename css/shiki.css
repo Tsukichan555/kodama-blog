@@ -1,0 +1,54 @@
+@reference "./tailwind.css";
+
+/**
+ * CSS Styles for Shiki code highlighting with dual themes.
+ * Shiki handles syntax highlighting colors automatically based on the theme.
+ */
+
+/* Code title styles */
+.remark-code-title {
+  @apply rounded-xs bg-gray-700 px-5 py-3 font-mono text-sm font-bold text-gray-200 dark:bg-gray-800;
+}
+
+.remark-code-title + div > pre {
+  @apply mt-0 rounded-t-none;
+}
+
+/* Shiki code block container styles */
+pre {
+  @apply overflow-x-auto rounded-lg my-4 p-4;
+  counter-reset: line;
+}
+
+/* Ensure pre tags inside a group wrapper maintain proper styling */
+.group pre {
+  @apply overflow-x-auto rounded-lg p-4;
+}
+
+/* Code block with dual theme support */
+pre code {
+  @apply grid text-sm font-mono;
+}
+
+/* Line numbers and highlighting */
+pre code[data-line-numbers] > [data-line]::before {
+  counter-increment: line;
+  content: counter(line);
+  @apply inline-block w-4 mr-4 text-right text-gray-500 dark:text-gray-400;
+}
+
+/* Highlighted lines */
+pre code [data-highlighted-line] {
+  @apply bg-gray-700/50 dark:bg-gray-800/50 -mx-4 px-4 border-l-4 border-primary-500;
+}
+
+/* Inline code */
+:not(pre) > code {
+  @apply px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-sm font-mono;
+}
+
+/* Theme-specific background colors for pre blocks */
+pre {
+  @apply bg-gray-50 dark:bg-gray-900;
+}
+

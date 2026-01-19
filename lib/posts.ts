@@ -6,6 +6,7 @@ import { allBlogs, allAuthors, type Blog, type Authors } from 'contentlayer/gene
 
 import { fetchFromMicroCMS, isMicroCMSEnabled } from './microcms/client'
 import { projectEntrypointsSubscribe } from 'next/dist/build/swc/generated-native'
+import { addSyntaxHighlighting } from './shiki-highlighter'
 
 interface MicroCMSListResponse<T> {
   contents: T[]
@@ -160,11 +161,12 @@ export const getPostBySlug = cache(async (slug: string): Promise<PostDetailResul
   if (isMicroCMSEnabled()) {
     try {
       const entry = await fetchFromMicroCMS<MicroCMSBlogEntry>(`blog/${slug}`)
+      const highlightedContent = await addSyntaxHighlighting(entry.maincontent)
       return {
         source: 'microcms',
         post: {
           ...mapMicroCMSToListItem(entry),
-          contentHtml: entry.maincontent,
+          contentHtml: highlightedContent,
           heroImage: entry.pic || null,
         },
       }
@@ -200,7 +202,8 @@ export const getAboutContent = cache(async (): Promise<AboutContentResult> => {
         await fetchFromMicroCMS<MicroCMSListResponse<MicroCMSAboutEntry>>('about?limit=1')
       const entry = response.contents[0]
       if (entry?.aboutme) {
-        return { source: 'microcms' as const, contentHtml: entry.aboutme }
+        const highlightedContent = await addSyntaxHighlighting(entry.aboutme)
+        return { source: 'microcms' as const, contentHtml: highlightedContent }
       }
       console.warn('microCMS about content is empty; falling back to contentlayer author content.')
     } catch (error) {
@@ -234,9 +237,10 @@ export const getDraftPost = async (params: MicroCMSDraftParams): Promise<DraftPr
 
   try {
     const entry = await fetchFromMicroCMS<MicroCMSBlogEntry>(`blog/${id}?draftKey=${draftKey}`)
+    const highlightedContent = await addSyntaxHighlighting(entry.maincontent)
     const post: MicroCMSBlogDetail = {
       ...mapMicroCMSToListItem(entry),
-      contentHtml: entry.maincontent,
+      contentHtml: highlightedContent,
       heroImage: entry.pic || null,
     }
     return {
