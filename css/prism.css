@@ -59,6 +59,11 @@ pre code {
   color: #4c4f69;
 }
 
+/* Ensure all token elements inherit proper color if not specifically styled */
+:not(.dark) .token {
+  color: inherit;
+}
+
 /* MicroCMS code block wrapper */
 .code-block-wrapper {
   @apply relative;

@@ -126,10 +126,15 @@ export const highlightMicroCMSHtml = (html: string): string => {
       if (!parent || parent.type !== 'element' || parent.tagName !== 'pre') return
 
       const properties = node.properties || {}
-      const language =
+      let language =
         getLanguageFromClassName(properties.className) ||
         getLanguageFromClassName(parent.properties?.className) ||
         defaultLanguage
+
+      // Arduino code should use cpp for better tokenization
+      if (language === 'arduino') {
+        language = 'cpp'
+      }
 
       if (!language || !refractor.registered(language)) return
 
