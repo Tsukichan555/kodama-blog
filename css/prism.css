@@ -44,8 +44,7 @@
 
 /* Code block background styles */
 pre {
-  @apply bg-white dark:bg-gray-900;
-  border: 1px solid #e6e9ef;
+  @apply border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900;
 }
 
 pre code {
