@@ -29,7 +29,10 @@ export default function Pre({ children, className }: PreProps) {
     if (textInput.current) {
       setCopied(true)
       const text = textInput.current.textContent || ''
-      navigator.clipboard.writeText(text)
+      navigator.clipboard.writeText(text).catch((err) => {
+        console.error('Failed to copy text:', err)
+        setCopied(false)
+      })
       setTimeout(() => {
         setCopied(false)
       }, 2000)

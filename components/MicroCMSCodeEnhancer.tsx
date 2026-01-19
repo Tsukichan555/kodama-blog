@@ -69,29 +69,33 @@ export default function MicroCMSCodeEnhancer() {
       // Copy functionality
       button.addEventListener('click', async () => {
         const text = codeElement.textContent || ''
-        await navigator.clipboard.writeText(text)
+        try {
+          await navigator.clipboard.writeText(text)
 
-        // Show checkmark
-        path.setAttribute(
-          'd',
-          'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4'
-        )
-        svg.classList.remove('text-gray-600', 'dark:text-gray-300')
-        svg.classList.add('text-green-400')
-        button.classList.remove('border-gray-300', 'dark:border-gray-600')
-        button.classList.add('border-green-400')
-
-        // Reset after 2 seconds
-        setTimeout(() => {
+          // Show checkmark
           path.setAttribute(
             'd',
-            'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2'
+            'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4'
           )
-          svg.classList.remove('text-green-400')
-          svg.classList.add('text-gray-600', 'dark:text-gray-300')
-          button.classList.remove('border-green-400')
-          button.classList.add('border-gray-300', 'dark:border-gray-600')
-        }, 2000)
+          svg.classList.remove('text-gray-600', 'dark:text-gray-300')
+          svg.classList.add('text-green-400')
+          button.classList.remove('border-gray-300', 'dark:border-gray-600')
+          button.classList.add('border-green-400')
+
+          // Reset after 2 seconds
+          setTimeout(() => {
+            path.setAttribute(
+              'd',
+              'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2'
+            )
+            svg.classList.remove('text-green-400')
+            svg.classList.add('text-gray-600', 'dark:text-gray-300')
+            button.classList.remove('border-green-400')
+            button.classList.add('border-gray-300', 'dark:border-gray-600')
+          }, 2000)
+        } catch (err) {
+          console.error('Failed to copy text:', err)
+        }
       })
     })
   }, [])
