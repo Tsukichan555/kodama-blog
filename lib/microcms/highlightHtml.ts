@@ -8,6 +8,10 @@ import { refractor } from 'refractor/lib/core.js'
 import arduino from 'refractor/lang/arduino.js'
 import cpp from 'refractor/lang/cpp.js'
 import c from 'refractor/lang/c.js'
+import armasm from 'refractor/lang/armasm.js'
+import asm6502 from 'refractor/lang/asm6502.js'
+import asmatmel from 'refractor/lang/asmatmel.js'
+import nasm from 'refractor/lang/nasm.js'
 import java from 'refractor/lang/java.js'
 import kotlin from 'refractor/lang/kotlin.js'
 import swift from 'refractor/lang/swift.js'
@@ -15,11 +19,27 @@ import rust from 'refractor/lang/rust.js'
 import go from 'refractor/lang/go.js'
 import ruby from 'refractor/lang/ruby.js'
 import php from 'refractor/lang/php.js'
+import python from 'refractor/lang/python.js'
+import lua from 'refractor/lang/lua.js'
 import bash from 'refractor/lang/bash.js'
+import shellSession from 'refractor/lang/shell-session.js'
+import powershell from 'refractor/lang/powershell.js'
+import batch from 'refractor/lang/batch.js'
+import makefile from 'refractor/lang/makefile.js'
+import cmake from 'refractor/lang/cmake.js'
+import linkerScript from 'refractor/lang/linker-script.js'
+import gcode from 'refractor/lang/gcode.js'
+import verilog from 'refractor/lang/verilog.js'
+import vhdl from 'refractor/lang/vhdl.js'
+import opencl from 'refractor/lang/opencl.js'
+import protobuf from 'refractor/lang/protobuf.js'
 import sql from 'refractor/lang/sql.js'
 import yaml from 'refractor/lang/yaml.js'
 import json from 'refractor/lang/json.js'
+import json5 from 'refractor/lang/json5.js'
 import toml from 'refractor/lang/toml.js'
+import ini from 'refractor/lang/ini.js'
+import csv from 'refractor/lang/csv.js'
 import docker from 'refractor/lang/docker.js'
 
 const defaultLanguage = 'js'
@@ -27,6 +47,10 @@ const defaultLanguage = 'js'
 refractor.register(arduino)
 refractor.register(cpp)
 refractor.register(c)
+refractor.register(armasm)
+refractor.register(asm6502)
+refractor.register(asmatmel)
+refractor.register(nasm)
 refractor.register(java)
 refractor.register(kotlin)
 refractor.register(swift)
@@ -34,11 +58,27 @@ refractor.register(rust)
 refractor.register(go)
 refractor.register(ruby)
 refractor.register(php)
+refractor.register(python)
+refractor.register(lua)
 refractor.register(bash)
+refractor.register(shellSession)
+refractor.register(powershell)
+refractor.register(batch)
+refractor.register(makefile)
+refractor.register(cmake)
+refractor.register(linkerScript)
+refractor.register(gcode)
+refractor.register(verilog)
+refractor.register(vhdl)
+refractor.register(opencl)
+refractor.register(protobuf)
 refractor.register(sql)
 refractor.register(yaml)
 refractor.register(json)
+refractor.register(json5)
 refractor.register(toml)
+refractor.register(ini)
+refractor.register(csv)
 refractor.register(docker)
 
 const getLanguageFromClassName = (className: unknown): string | undefined => {
