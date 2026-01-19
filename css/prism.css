@@ -61,76 +61,76 @@ pre code {
 }
 
 /* Token styles for Light Mode (GitHub Light theme inspired) */
-.token.comment,
-.token.prolog,
-.token.doctype,
-.token.cdata {
+:not(.dark) .token.comment,
+:not(.dark) .token.prolog,
+:not(.dark) .token.doctype,
+:not(.dark) .token.cdata {
   color: #6a737d;
   font-style: italic;
 }
 
-.token.punctuation {
+:not(.dark) .token.punctuation {
   color: #24292e;
 }
 
-.token.property,
-.token.tag,
-.token.boolean,
-.token.number,
-.token.constant,
-.token.symbol,
-.token.deleted {
+:not(.dark) .token.property,
+:not(.dark) .token.tag,
+:not(.dark) .token.boolean,
+:not(.dark) .token.number,
+:not(.dark) .token.constant,
+:not(.dark) .token.symbol,
+:not(.dark) .token.deleted {
   color: #005cc5;
 }
 
-.token.selector,
-.token.attr-name,
-.token.string,
-.token.char,
-.token.builtin,
-.token.inserted {
+:not(.dark) .token.selector,
+:not(.dark) .token.attr-name,
+:not(.dark) .token.string,
+:not(.dark) .token.char,
+:not(.dark) .token.builtin,
+:not(.dark) .token.inserted {
   color: #032f62;
 }
 
-.token.operator,
-.token.entity,
-.token.url,
-.language-css .token.string,
-.style .token.string {
+:not(.dark) .token.operator,
+:not(.dark) .token.entity,
+:not(.dark) .token.url,
+:not(.dark) .language-css .token.string,
+:not(.dark) .style .token.string {
   color: #d73a49;
 }
 
-.token.atrule,
-.token.attr-value,
-.token.keyword {
+:not(.dark) .token.atrule,
+:not(.dark) .token.attr-value,
+:not(.dark) .token.keyword {
   color: #d73a49;
 }
 
-.token.function,
-.token.class-name {
+:not(.dark) .token.function,
+:not(.dark) .token.class-name {
   color: #6f42c1;
 }
 
-.token.regex,
-.token.important,
-.token.variable {
+:not(.dark) .token.regex,
+:not(.dark) .token.important,
+:not(.dark) .token.variable {
   color: #e36209;
 }
 
-.token.important,
-.token.bold {
+:not(.dark) .token.important,
+:not(.dark) .token.bold {
   font-weight: bold;
 }
 
-.token.italic {
+:not(.dark) .token.italic {
   font-style: italic;
 }
 
-.token.entity {
+:not(.dark) .token.entity {
   cursor: help;
 }
 
-.namespace {
+:not(.dark) .namespace {
   opacity: 0.7;
 }
 

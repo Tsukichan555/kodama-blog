@@ -26,17 +26,23 @@ export default function Pre({ children, className }: PreProps) {
   }
 
   const onCopy = () => {
-    if (textInput.current) {
-      setCopied(true)
-      const text = textInput.current.textContent || ''
-      navigator.clipboard.writeText(text).catch((err) => {
-        console.error('Failed to copy text:', err)
-        setCopied(false)
-      })
-      setTimeout(() => {
-        setCopied(false)
-      }, 2000)
+    if (!textInput.current) return
+
+    // Check if clipboard API is available
+    if (!navigator.clipboard) {
+      console.warn('Clipboard API not available')
+      return
     }
+
+    setCopied(true)
+    const text = textInput.current.textContent || ''
+    navigator.clipboard.writeText(text).catch((err) => {
+      console.error('Failed to copy text:', err)
+      setCopied(false)
+    })
+    setTimeout(() => {
+      setCopied(false)
+    }, 2000)
   }
 
   return (

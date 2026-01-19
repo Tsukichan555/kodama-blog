@@ -25,7 +25,10 @@ export default function MicroCMSCodeEnhancer() {
       // Create wrapper for hover detection
       const wrapper = document.createElement('div')
       wrapper.className = 'relative code-block-wrapper'
-      preElement.parentNode?.insertBefore(wrapper, preElement)
+      const parentNode = preElement.parentNode
+      if (!parentNode) return // Guard against null parent
+
+      parentNode.insertBefore(wrapper, preElement)
       wrapper.appendChild(preElement)
 
       // Create copy button
@@ -68,6 +71,12 @@ export default function MicroCMSCodeEnhancer() {
 
       // Copy functionality
       button.addEventListener('click', async () => {
+        // Check if clipboard API is available
+        if (!navigator.clipboard) {
+          console.warn('Clipboard API not available')
+          return
+        }
+
         const text = codeElement.textContent || ''
         try {
           await navigator.clipboard.writeText(text)
