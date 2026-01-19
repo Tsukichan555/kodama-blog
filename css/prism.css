@@ -44,7 +44,8 @@
 
 /* Code block background styles */
 pre {
-  @apply bg-gray-50 dark:bg-gray-900;
+  @apply bg-white dark:bg-gray-900;
+  border: 1px solid #e6e9ef;
 }
 
 pre code {
@@ -60,17 +61,17 @@ pre code {
   @apply overflow-x-auto rounded-lg;
 }
 
-/* Token styles for Light Mode (GitHub Light theme inspired) */
+/* Token styles for Light Mode (Catppuccin Latte inspired) */
 :not(.dark) .token.comment,
 :not(.dark) .token.prolog,
 :not(.dark) .token.doctype,
 :not(.dark) .token.cdata {
-  color: #6a737d;
+  color: #9ca0b0;
   font-style: italic;
 }
 
 :not(.dark) .token.punctuation {
-  color: #24292e;
+  color: #5c5f77;
 }
 
 :not(.dark) .token.property,
@@ -80,7 +81,7 @@ pre code {
 :not(.dark) .token.constant,
 :not(.dark) .token.symbol,
 :not(.dark) .token.deleted {
-  color: #005cc5;
+  color: #fe640b;
 }
 
 :not(.dark) .token.selector,
@@ -89,7 +90,7 @@ pre code {
 :not(.dark) .token.char,
 :not(.dark) .token.builtin,
 :not(.dark) .token.inserted {
-  color: #032f62;
+  color: #40a02b;
 }
 
 :not(.dark) .token.operator,
@@ -97,24 +98,24 @@ pre code {
 :not(.dark) .token.url,
 :not(.dark) .language-css .token.string,
 :not(.dark) .style .token.string {
-  color: #d73a49;
+  color: #04a5e5;
 }
 
 :not(.dark) .token.atrule,
 :not(.dark) .token.attr-value,
 :not(.dark) .token.keyword {
-  color: #d73a49;
+  color: #8839ef;
 }
 
 :not(.dark) .token.function,
 :not(.dark) .token.class-name {
-  color: #6f42c1;
+  color: #df8e1d;
 }
 
 :not(.dark) .token.regex,
 :not(.dark) .token.important,
 :not(.dark) .token.variable {
-  color: #e36209;
+  color: #d20f39;
 }
 
 :not(.dark) .token.important,
