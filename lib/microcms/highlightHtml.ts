@@ -2,6 +2,7 @@ import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
 import { toHtml } from 'hast-util-to-html'
 import { toString } from 'hast-util-to-string'
 import { visit } from 'unist-util-visit'
+import type { ElementContent } from 'hast'
 import { refractor } from 'refractor/lib/core.js'
 
 import arduino from 'refractor/lang/arduino.js'
@@ -64,6 +65,15 @@ const ensureLanguageClass = (properties: Record<string, unknown>, language: stri
   properties.className = className
 }
 
+const normalizeHighlightedNodes = (nodes: ElementContent[]): ElementContent[] =>
+  nodes.map((node) => {
+    if (node.type !== 'element') return node
+    return {
+      ...node,
+      properties: node.properties || {},
+    }
+  })
+
 export const highlightMicroCMSHtml = (html: string): string => {
   if (!html || !html.includes('<code')) return html
 
@@ -89,7 +99,7 @@ export const highlightMicroCMSHtml = (html: string): string => {
       try {
         const highlighted = refractor.highlight(code, language)
         if (!highlighted.children || highlighted.children.length === 0) return
-        node.children = highlighted.children
+        node.children = normalizeHighlightedNodes(highlighted.children as ElementContent[])
         node.properties = properties
         ensureLanguageClass(properties, language)
         if (parent.properties) {
