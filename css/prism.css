@@ -51,6 +51,14 @@ pre code {
   @apply bg-transparent;
 }
 
+/* Set base text color for code blocks in light mode */
+:not(.dark) pre,
+:not(.dark) pre code,
+:not(.dark) code[class*='language-'],
+:not(.dark) pre[class*='language-'] {
+  color: #4c4f69;
+}
+
 /* MicroCMS code block wrapper */
 .code-block-wrapper {
   @apply relative;
@@ -117,6 +125,12 @@ pre code {
   color: #d20f39;
 }
 
+/* Ensure plain identifiers and parameters have good visibility */
+:not(.dark) .token.parameter,
+:not(.dark) .token.maybe-class-name {
+  color: #4c4f69;
+}
+
 :not(.dark) .token.important,
 :not(.dark) .token.bold {
   font-weight: bold;
@@ -131,7 +145,7 @@ pre code {
 }
 
 :not(.dark) .namespace {
-  opacity: 0.7;
+  opacity: 1;
 }
 
 /* Token styles for Dark Mode (Night Owl theme) */
