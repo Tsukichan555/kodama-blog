@@ -6,6 +6,7 @@ import { allBlogs, allAuthors, type Blog, type Authors } from 'contentlayer/gene
 
 import { fetchFromMicroCMS, isMicroCMSEnabled } from './microcms/client'
 import { projectEntrypointsSubscribe } from 'next/dist/build/swc/generated-native'
+import { highlightMicroCMSHtml } from './microcms/highlightHtml'
 
 interface MicroCMSListResponse<T> {
   contents: T[]
@@ -164,7 +165,7 @@ export const getPostBySlug = cache(async (slug: string): Promise<PostDetailResul
         source: 'microcms',
         post: {
           ...mapMicroCMSToListItem(entry),
-          contentHtml: entry.maincontent,
+          contentHtml: highlightMicroCMSHtml(entry.maincontent || ''),
           heroImage: entry.pic || null,
         },
       }
@@ -200,7 +201,7 @@ export const getAboutContent = cache(async (): Promise<AboutContentResult> => {
         await fetchFromMicroCMS<MicroCMSListResponse<MicroCMSAboutEntry>>('about?limit=1')
       const entry = response.contents[0]
       if (entry?.aboutme) {
-        return { source: 'microcms' as const, contentHtml: entry.aboutme }
+        return { source: 'microcms' as const, contentHtml: highlightMicroCMSHtml(entry.aboutme) }
       }
       console.warn('microCMS about content is empty; falling back to contentlayer author content.')
     } catch (error) {
@@ -236,7 +237,7 @@ export const getDraftPost = async (params: MicroCMSDraftParams): Promise<DraftPr
     const entry = await fetchFromMicroCMS<MicroCMSBlogEntry>(`blog/${id}?draftKey=${draftKey}`)
     const post: MicroCMSBlogDetail = {
       ...mapMicroCMSToListItem(entry),
-      contentHtml: entry.maincontent,
+      contentHtml: highlightMicroCMSHtml(entry.maincontent || ''),
       heroImage: entry.pic || null,
     }
     return {
