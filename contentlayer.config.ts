@@ -20,11 +20,51 @@ import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeKatex from 'rehype-katex'
 import rehypeKatexNoTranslate from 'rehype-katex-notranslate'
 import rehypeCitation from 'rehype-citation'
-import rehypePrismPlus from 'rehype-prism-plus'
+import { refractor } from 'refractor/lib/core.js'
+import rehypePrismGenerator from 'rehype-prism-plus/generator'
 import rehypePresetMinify from 'rehype-preset-minify'
 import siteMetadata from './data/siteMetadata'
 import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer.js'
 import prettier from 'prettier'
+
+// Import additional language definitions for Prism syntax highlighting
+import arduino from 'refractor/lang/arduino.js'
+import cpp from 'refractor/lang/cpp.js'
+import c from 'refractor/lang/c.js'
+import java from 'refractor/lang/java.js'
+import kotlin from 'refractor/lang/kotlin.js'
+import swift from 'refractor/lang/swift.js'
+import rust from 'refractor/lang/rust.js'
+import go from 'refractor/lang/go.js'
+import ruby from 'refractor/lang/ruby.js'
+import php from 'refractor/lang/php.js'
+import bash from 'refractor/lang/bash.js'
+import sql from 'refractor/lang/sql.js'
+import yaml from 'refractor/lang/yaml.js'
+import json from 'refractor/lang/json.js'
+import toml from 'refractor/lang/toml.js'
+import docker from 'refractor/lang/docker.js'
+
+// Register additional languages with refractor
+refractor.register(arduino)
+refractor.register(cpp)
+refractor.register(c)
+refractor.register(java)
+refractor.register(kotlin)
+refractor.register(swift)
+refractor.register(rust)
+refractor.register(go)
+refractor.register(ruby)
+refractor.register(php)
+refractor.register(bash)
+refractor.register(sql)
+refractor.register(yaml)
+refractor.register(json)
+refractor.register(toml)
+refractor.register(docker)
+
+// Create custom rehype-prism plugin with registered languages
+const rehypePrismPlus = rehypePrismGenerator(refractor)
 
 const root = process.cwd()
 const isProduction = process.env.NODE_ENV === 'production'
