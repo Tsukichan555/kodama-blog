@@ -20,10 +20,19 @@ export default function CopyButton({ text }: CopyButtonProps) {
     }
   }
 
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      handleCopy()
+    }
+  }
+
   return (
     <button
       onClick={handleCopy}
-      className="absolute top-2 right-2 rounded-md bg-gray-700/50 p-2 opacity-0 transition-colors duration-200 group-hover:opacity-100 hover:bg-gray-700/70 dark:bg-gray-800/50 dark:hover:bg-gray-800/70"
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+      className="absolute top-2 right-2 rounded-md bg-gray-700/50 p-2 opacity-0 transition-colors duration-200 group-hover:opacity-100 hover:bg-gray-700/70 focus:opacity-100 dark:bg-gray-800/50 dark:hover:bg-gray-800/70"
       aria-label="Copy code to clipboard"
       title="Copy code"
     >

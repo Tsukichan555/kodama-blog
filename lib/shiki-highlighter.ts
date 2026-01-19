@@ -1,6 +1,7 @@
 import 'server-only'
 
 import { codeToHtml } from 'shiki'
+import { decode } from 'he'
 
 /**
  * Process HTML content from microCMS to add syntax highlighting to code blocks
@@ -22,13 +23,8 @@ export async function addSyntaxHighlighting(html: string): Promise<string> {
     const [fullMatch, language, code] = match
     const lang = language || 'text'
 
-    // Decode HTML entities in the code
-    const decodedCode = code
-      .replace(/&lt;/g, '<')
-      .replace(/&gt;/g, '>')
-      .replace(/&quot;/g, '"')
-      .replace(/&#39;/g, "'")
-      .replace(/&amp;/g, '&')
+    // Decode HTML entities in the code using 'he' library for comprehensive decoding
+    const decodedCode = decode(code)
 
     try {
       const highlighted = await codeToHtml(decodedCode, {

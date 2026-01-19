@@ -17,7 +17,9 @@ export default function Pre({ children, raw, ...props }: PreProps) {
     if (preRef.current) {
       const code = preRef.current.querySelector('code')
       if (code) {
-        setCodeText(code.textContent || '')
+        const text = code.textContent || ''
+        // Only update if text actually changed to avoid unnecessary re-renders
+        setCodeText((prev) => (prev === text ? prev : text))
       }
     }
   }, [children])
