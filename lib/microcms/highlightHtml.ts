@@ -2,7 +2,7 @@ import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
 import { toHtml } from 'hast-util-to-html'
 import { toString } from 'hast-util-to-string'
 import { visit } from 'unist-util-visit'
-import type { ElementContent } from 'hast'
+import type { ElementContent, Element } from 'hast'
 import { refractor } from 'refractor/lib/core.js'
 
 import arduino from 'refractor/lang/arduino.js'
@@ -119,7 +119,11 @@ export const highlightMicroCMSHtml = (html: string): string => {
 
   try {
     // Early return if no code blocks and no embeds
-    if (!html.includes('<code') && !html.includes('<script') && !html.includes('iframe')) {
+    const hasCodeBlocks = html.includes('<code')
+    const hasEmbedScripts = html.includes('<script')
+    const hasIframes = html.includes('iframe')
+
+    if (!hasCodeBlocks && !hasEmbedScripts && !hasIframes) {
       return html
     }
 
@@ -127,7 +131,7 @@ export const highlightMicroCMSHtml = (html: string): string => {
     let updated = false
 
     // Process code blocks for syntax highlighting
-    if (html.includes('<code')) {
+    if (hasCodeBlocks) {
       visit(tree, 'element', (node, _index, parent) => {
         if (node.tagName !== 'code') return
         if (!parent || parent.type !== 'element' || parent.tagName !== 'pre') return
@@ -169,6 +173,9 @@ export const highlightMicroCMSHtml = (html: string): string => {
 
     // Remove inline script tags from embeds (they will be loaded by MicroCMSEmbedEnhancer)
     // This prevents duplicate script loading and potential conflicts
+    // Collect indices to remove in reverse order to avoid index shifting issues
+    const scriptsToRemove: Array<{ parent: Element; index: number }> = []
+
     visit(tree, 'element', (node, index, parent) => {
       if (node.tagName !== 'script') return
       if (!parent || typeof index !== 'number') return
@@ -178,10 +185,14 @@ export const highlightMicroCMSHtml = (html: string): string => {
         typeof src === 'string' &&
         (src.includes('platform.twitter.com/widgets.js') || src.includes('instagram.com/embed.js'))
       ) {
-        // Remove the script tag - it will be loaded by MicroCMSEmbedEnhancer
-        parent.children.splice(index, 1)
-        updated = true
+        scriptsToRemove.push({ parent, index })
       }
+    })
+
+    // Remove scripts in reverse order to maintain correct indices
+    scriptsToRemove.reverse().forEach(({ parent, index }) => {
+      parent.children.splice(index, 1)
+      updated = true
     })
 
     return updated ? toHtml(tree) : html

@@ -70,11 +70,13 @@ export default function MicroCMSEmbedEnhancer() {
     // Note: YouTube embeds work out of the box with iframe tags and don't require
     // additional script loading for basic functionality
 
-    // Execute all embed handlers with a slight delay to ensure DOM is ready
+    // Execute all embed handlers with a slight delay to ensure DOM is fully ready
+    // This delay allows MicroCMS content to be rendered before checking for embeds
+    const DOM_READY_DELAY = 100
     const timer = setTimeout(() => {
       loadTwitterScript()
       loadInstagramScript()
-    }, 100)
+    }, DOM_READY_DELAY)
 
     return () => clearTimeout(timer)
   }, [])
