@@ -39,7 +39,7 @@ export default function PostLayout({ content, next, prev, children }: LayoutProp
       <article>
         <div>
           <header>
-            <div className="space-y-1 border-b border-gray-200 pb-10 text-center dark:border-gray-700">
+            <div className="[row-gap:0.25rem] border-b border-gray-200 text-center [padding-block-end:2.5rem] dark:border-gray-700">
               <dl>
                 <div>
                   <dt className="sr-only">Created at</dt>
@@ -65,22 +65,27 @@ export default function PostLayout({ content, next, prev, children }: LayoutProp
               </div>
             </div>
           </header>
-          <div className="grid-rows-[auto_1fr] divide-y divide-gray-200 pb-8 xl:divide-y-0 dark:divide-gray-700">
-            <div className="divide-y divide-gray-200 xl:col-span-3 xl:row-span-2 xl:pb-0 dark:divide-gray-700">
-              <div className="prose dark:prose-invert max-w-none pt-10 pb-8">{children}</div>
+          <div className="grid-rows-[auto_1fr] divide-y divide-gray-200 [padding-block-end:var(--spacing-section-bottom)] xl:divide-y-0 dark:divide-gray-700">
+            <div className="divide-y divide-gray-200 xl:col-span-3 xl:row-span-2 xl:[padding-block-end:0] dark:divide-gray-700">
+              <div className="prose dark:prose-invert max-w-none [padding-block-end:var(--spacing-section-bottom)] [padding-block-start:2.5rem]">
+                {children}
+              </div>
             </div>
             {siteMetadata.comments && (
-              <div className="pt-6 pb-6 text-center text-gray-700 dark:text-gray-300" id="comment">
+              <div
+                className="[padding-block:var(--spacing-section-y)] text-center text-gray-700 dark:text-gray-300"
+                id="comment"
+              >
                 <Comments slug={slug} />
               </div>
             )}
             <footer>
               <div className="flex flex-col text-sm font-medium sm:flex-row sm:justify-between sm:text-base">
                 {prev && prev.path && (
-                  <div className="pt-4 xl:pt-8">
+                  <div className="[padding-block-start:1rem] xl:[padding-block-start:var(--spacing-section-bottom)]">
                     <Link
                       href={`/${prev.path}`}
-                      className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400 flex flex-row gap-2"
+                      className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400 flex flex-row [gap:0.5rem]"
                       aria-label={`Previous post: ${prev.title}`}
                     >
                       <AirplaneIcon direction="left" /> {prev.title}
@@ -88,7 +93,7 @@ export default function PostLayout({ content, next, prev, children }: LayoutProp
                   </div>
                 )}
                 {next && next.path && (
-                  <div className="pt-4 xl:pt-8">
+                  <div className="[padding-block-start:1rem] xl:[padding-block-start:var(--spacing-section-bottom)]">
                     <Link
                       href={`/${next.path}`}
                       className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
