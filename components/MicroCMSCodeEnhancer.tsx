@@ -34,7 +34,7 @@ export default function MicroCMSCodeEnhancer() {
       // Create copy button
       const button = document.createElement('button')
       button.className =
-        'code-copy-button absolute right-2 top-2 h-8 w-8 rounded border-2 bg-gray-100 p-1 opacity-0 transition-opacity hover:opacity-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600'
+        'code-copy-button absolute [right:0.5rem] [top:0.5rem] [width:var(--size-icon-lg)] [height:var(--size-icon-lg)] rounded [border-width:2px] bg-gray-100 [padding:0.25rem] opacity-0 transition-opacity hover:opacity-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600'
       button.setAttribute('aria-label', 'Copy code')
       button.type = 'button'
 
