@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer>
       <div className="mt-16 flex flex-col items-center">
-        <div className="mb-3 flex space-x-4">
+        <div className="flex [column-gap:var(--gap-md)] [margin-block-end:0.75rem]">
           {/* <SocialIcon kind="mail" href={`mailto:${siteMetadata.email}`} size={6} /> */}
           <SocialIcon
             kind="mail"
@@ -24,14 +24,14 @@ export default function Footer() {
           <SocialIcon kind="threads" href={siteMetadata.threads} size={6} />
           <SocialIcon kind="medium" href={siteMetadata.medium} size={6} />
         </div>
-        <div className="mb-2 flex space-x-2 text-sm text-gray-500 dark:text-gray-400">
+        <div className="flex [column-gap:0.5rem] text-sm text-gray-500 [margin-block-end:0.5rem] dark:text-gray-400">
           <div>{siteMetadata.author}</div>
           <div>{` • `}</div>
           <div>{`© ${new Date().getFullYear()}`}</div>
           <div>{` • `}</div>
           <Link href="/">{siteMetadata.title}</Link>
         </div>
-        <div className="mb-8 text-sm text-gray-500 dark:text-gray-400"></div>
+        <div className="text-sm text-gray-500 [margin-block-end:var(--spacing-section-bottom)] dark:text-gray-400"></div>
       </div>
     </footer>
   )

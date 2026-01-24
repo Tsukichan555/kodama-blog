@@ -7,7 +7,8 @@
 /* Core theme configuration */
 @theme {
   /* Font families */
-  --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+  --font-sans:
+    var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
     'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
   /* Colors */
@@ -46,6 +47,42 @@
   --z-60: 60;
   --z-70: 70;
   --z-80: 80;
+
+  /* Spacing tokens */
+  --spacing-header-y: 2.5rem; /* py-10 = 40px = 2.5rem */
+  --spacing-section-y: 1.5rem; /* py-6 = 24px = 1.5rem */
+  --spacing-section-top: 1.5rem; /* pt-6 = 24px = 1.5rem */
+  --spacing-section-bottom: 2rem; /* pb-8 = 32px = 2rem */
+  --spacing-footer-y: 3rem; /* py-12 = 48px = 3rem */
+  --spacing-mobile-nav-left: 3rem; /* pl-12 = 48px = 3rem */
+
+  /* Gap/Space tokens */
+  --gap-xs: 0.5rem; /* gap-2 = 8px = 0.5rem */
+  --gap-sm: 0.75rem; /* gap-3 = 12px = 0.75rem */
+  --gap-md: 1rem; /* gap-4 = 16px = 1rem */
+  --gap-lg: 1.5rem; /* gap-6 = 24px = 1.5rem */
+
+  /* Sizing tokens */
+  --size-icon-sm: 1.25rem; /* w-5/h-5 = 20px = 1.25rem */
+  --size-icon-md: 1.5rem; /* w-6/h-6 = 24px = 1.5rem */
+  --size-icon-lg: 2rem; /* w-8/h-8 = 32px = 2rem */
+  --size-icon-xl: 2.5rem; /* w-10/h-10 = 40px = 2.5rem */
+  --size-icon-2xl: 4rem; /* w-16/h-16 = 64px = 4rem */
+  --size-button-sm: 8rem; /* w-32 = 128px = 8rem */
+
+  /* Container max-width tokens */
+  --container-sm: 32rem; /* max-w-lg = 512px = 32rem */
+  --container-md: 48rem; /* max-w-3xl = 768px = 48rem */
+  --container-lg: 64rem; /* max-w-5xl = 1024px = 64rem */
+  --container-nav-sm: 10rem; /* max-w-40 = 160px = 10rem */
+  --container-nav-md: 18rem; /* max-w-72 = 288px = 18rem */
+  --container-nav-lg: 24rem; /* max-w-96 = 384px = 24rem */
+
+  /* Border radius tokens */
+  --radius-xs: 0.125rem; /* rounded-sm = 2px = 0.125rem */
+  --radius-md: 0.5rem; /* rounded-lg = 8px = 0.5rem */
+  --radius-lg: 1rem; /* rounded-2xl = 16px = 1rem */
+  --radius-full: 9999px; /* rounded-full */
 }
 
 /*
