@@ -115,47 +115,72 @@ const normalizeHighlightedNodes = (nodes: ElementContent[]): ElementContent[] =>
   })
 
 export const highlightMicroCMSHtml = (html: string): string => {
-  if (!html || !html.includes('<code')) return html
+  if (!html) return html
 
   try {
+    // Early return if no code blocks and no embeds
+    if (!html.includes('<code') && !html.includes('<script') && !html.includes('iframe')) {
+      return html
+    }
+
     const tree = fromHtmlIsomorphic(html, { fragment: true })
     let updated = false
 
-    visit(tree, 'element', (node, _index, parent) => {
-      if (node.tagName !== 'code') return
-      if (!parent || parent.type !== 'element' || parent.tagName !== 'pre') return
+    // Process code blocks for syntax highlighting
+    if (html.includes('<code')) {
+      visit(tree, 'element', (node, _index, parent) => {
+        if (node.tagName !== 'code') return
+        if (!parent || parent.type !== 'element' || parent.tagName !== 'pre') return
 
-      const properties = node.properties || {}
-      let language =
-        getLanguageFromClassName(properties.className) ||
-        getLanguageFromClassName(parent.properties?.className) ||
-        defaultLanguage
+        const properties = node.properties || {}
+        let language =
+          getLanguageFromClassName(properties.className) ||
+          getLanguageFromClassName(parent.properties?.className) ||
+          defaultLanguage
 
-      // Arduino code should use cpp for better tokenization
-      if (language === 'arduino') {
-        language = 'cpp'
-      }
-
-      if (!language || !refractor.registered(language)) return
-
-      const code = toString(node)
-      if (!code) return
-
-      try {
-        const highlighted = refractor.highlight(code, language)
-        if (!highlighted.children || highlighted.children.length === 0) return
-        node.children = normalizeHighlightedNodes(highlighted.children as ElementContent[])
-        node.properties = properties
-        ensureLanguageClass(properties, language)
-        if (parent.properties) {
-          ensureLanguageClass(parent.properties, language)
-        } else {
-          parent.properties = {}
-          ensureLanguageClass(parent.properties, language)
+        // Arduino code should use cpp for better tokenization
+        if (language === 'arduino') {
+          language = 'cpp'
         }
+
+        if (!language || !refractor.registered(language)) return
+
+        const code = toString(node)
+        if (!code) return
+
+        try {
+          const highlighted = refractor.highlight(code, language)
+          if (!highlighted.children || highlighted.children.length === 0) return
+          node.children = normalizeHighlightedNodes(highlighted.children as ElementContent[])
+          node.properties = properties
+          ensureLanguageClass(properties, language)
+          if (parent.properties) {
+            ensureLanguageClass(parent.properties, language)
+          } else {
+            parent.properties = {}
+            ensureLanguageClass(parent.properties, language)
+          }
+          updated = true
+        } catch {
+          return
+        }
+      })
+    }
+
+    // Remove inline script tags from embeds (they will be loaded by MicroCMSEmbedEnhancer)
+    // This prevents duplicate script loading and potential conflicts
+    visit(tree, 'element', (node, index, parent) => {
+      if (node.tagName !== 'script') return
+      if (!parent || typeof index !== 'number') return
+
+      const src = node.properties?.src
+      if (
+        typeof src === 'string' &&
+        (src.includes('platform.twitter.com/widgets.js') || src.includes('instagram.com/embed.js'))
+      ) {
+        // Remove the script tag - it will be loaded by MicroCMSEmbedEnhancer
+        parent.children.splice(index, 1)
         updated = true
-      } catch {
-        return
       }
     })
 

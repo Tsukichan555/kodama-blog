@@ -14,8 +14,13 @@ export default function MicroCMSEmbedEnhancer() {
     // X (Twitter) Platform Script
     // Loads the Twitter widgets.js script to render Twitter embeds
     const loadTwitterScript = () => {
-      // Check if Twitter embed exists
-      if (!document.querySelector('.twitter-tweet')) return
+      // Check for Twitter embeds - both blockquote and iframe formats
+      const hasTwitterBlockquote = document.querySelector('.twitter-tweet')
+      const hasTwitterIframe = document.querySelector(
+        'iframe[src*="twitter.com"], iframe[src*="x.com"]'
+      )
+
+      if (!hasTwitterBlockquote && !hasTwitterIframe) return
 
       // Check if script already loaded
       if (document.getElementById('twitter-wjs')) {
@@ -38,8 +43,11 @@ export default function MicroCMSEmbedEnhancer() {
     // Instagram Embed Script
     // Loads the Instagram embed.js script to render Instagram posts
     const loadInstagramScript = () => {
-      // Check if Instagram embed exists
-      if (!document.querySelector('.instagram-media')) return
+      // Check for Instagram embeds - both blockquote and iframe formats
+      const hasInstagramBlockquote = document.querySelector('.instagram-media')
+      const hasInstagramIframe = document.querySelector('iframe[src*="instagram.com"]')
+
+      if (!hasInstagramBlockquote && !hasInstagramIframe) return
 
       // Check if script already loaded
       if (document.getElementById('instagram-embed')) {
@@ -62,9 +70,13 @@ export default function MicroCMSEmbedEnhancer() {
     // Note: YouTube embeds work out of the box with iframe tags and don't require
     // additional script loading for basic functionality
 
-    // Execute all embed handlers
-    loadTwitterScript()
-    loadInstagramScript()
+    // Execute all embed handlers with a slight delay to ensure DOM is ready
+    const timer = setTimeout(() => {
+      loadTwitterScript()
+      loadInstagramScript()
+    }, 100)
+
+    return () => clearTimeout(timer)
   }, [])
 
   return null
