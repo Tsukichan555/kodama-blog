@@ -64,6 +64,19 @@ pre code {
   color: inherit;
 }
 
+/* Set base text color for code blocks in dark mode */
+.dark pre,
+.dark pre code,
+.dark code[class*='language-'],
+.dark pre[class*='language-'] {
+  color: #d6deeb;
+}
+
+/* Ensure all token elements inherit proper color if not specifically styled */
+.dark .token {
+  color: inherit;
+}
+
 /* MicroCMS code block wrapper */
 .code-block-wrapper {
   @apply relative;
