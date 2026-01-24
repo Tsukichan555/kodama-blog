@@ -39,7 +39,7 @@ export default function PostLayout({ content, next, prev, children }: LayoutProp
       <article>
         <div>
           <header>
-            <div className="[row-gap:0.25rem] border-b border-gray-200 text-center [padding-block-end:2.5rem] dark:border-gray-700">
+            <div className="space-y-1 border-b border-gray-200 text-center [padding-block-end:2.5rem] dark:border-gray-700">
               <dl>
                 <div>
                   <dt className="sr-only">Created at</dt>

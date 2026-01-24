@@ -76,7 +76,7 @@ export default function Home({
   return (
     <>
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
-        <div className="[row-gap:0.5rem] [padding-block-end:var(--spacing-section-bottom)] [padding-block-start:var(--spacing-section-top)] md:[row-gap:1.25rem]">
+        <div className="space-y-2 [padding-block-end:var(--spacing-section-bottom)] [padding-block-start:var(--spacing-section-top)] md:space-y-5">
           <h1 className="text-3xl leading-9 font-extrabold tracking-tight text-gray-900 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14 dark:text-gray-100">
             Lockhoda Martin
           </h1>
@@ -98,7 +98,7 @@ export default function Home({
             return (
               <li key={slug} className="[padding-block:var(--spacing-footer-y)]">
                 <article>
-                  <div className="[row-gap:0.5rem] xl:grid xl:grid-cols-4 xl:items-stretch xl:[row-gap:0]">
+                  <div className="space-y-2 xl:grid xl:grid-cols-4 xl:items-stretch xl:space-y-0">
                     <div className="[padding-inline-end:1rem]">
                       <div className="relative aspect-4/3 w-full overflow-hidden xl:aspect-auto xl:h-full">
                         {imageUrl ? (
@@ -118,8 +118,8 @@ export default function Home({
                         <div className="pointer-events-none absolute inset-0" />
                       </div>
                     </div>
-                    <div className="[row-gap:1.25rem] xl:col-span-3">
-                      <div className="[row-gap:1.5rem]">
+                    <div className="space-y-5 xl:col-span-3">
+                      <div className="space-y-6">
                         <div>
                           <h2 className="text-2xl leading-8 font-bold tracking-tight">
                             <Link

@@ -47,8 +47,8 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
       <article>
         <div className="xl:divide-y xl:divide-gray-200 xl:dark:divide-gray-700">
           <header className="[padding-block-start:var(--spacing-section-top)] xl:[padding-block-end:var(--spacing-section-y)]">
-            <div className="[row-gap:0.25rem] text-center">
-              <dl className="[row-gap:2.5rem]">
+            <div className="space-y-1 text-center">
+              <dl className="space-y-10">
                 <div>
                   <dt className="sr-only">Created at</dt>
                   {showUpdatedAt ? <dt className="sr-only">Revised at</dt> : null}

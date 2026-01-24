@@ -80,6 +80,7 @@
 
   /* Border radius tokens */
   --radius-xs: 0.125rem; /* rounded-sm = 2px = 0.125rem */
+  --radius-sm: 0.25rem; /* rounded = 4px = 0.25rem */
   --radius-md: 0.5rem; /* rounded-lg = 8px = 0.5rem */
   --radius-lg: 1rem; /* rounded-2xl = 16px = 1rem */
   --radius-full: 9999px; /* rounded-full */

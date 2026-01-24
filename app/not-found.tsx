@@ -3,7 +3,7 @@ import Link from '@/components/Link'
 export default function NotFound() {
   return (
     <div className="flex flex-col items-start justify-start md:mt-24 md:flex-row md:items-center md:justify-center md:[column-gap:var(--gap-lg)]">
-      <div className="[column-gap:0.5rem] [padding-block-end:var(--spacing-section-bottom)] [padding-block-start:var(--spacing-section-top)] md:[row-gap:1.25rem]">
+      <div className="space-x-2 [padding-block-end:var(--spacing-section-bottom)] [padding-block-start:var(--spacing-section-top)] md:space-y-5">
         <h1 className="text-6xl leading-9 font-extrabold tracking-tight text-gray-900 md:[border-inline-end-width:2px] md:[padding-inline:var(--spacing-section-y)] md:text-8xl md:leading-14 dark:text-gray-100">
           404
         </h1>
