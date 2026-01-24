@@ -56,7 +56,7 @@ export default function Pre({ children, className }: PreProps) {
         <button
           aria-label="Copy code"
           type="button"
-          className={`absolute top-2 right-2 h-8 w-8 rounded border-2 bg-gray-100 p-1 dark:bg-gray-800 ${
+          className={`absolute [top:0.5rem] [right:0.5rem] [height:var(--size-icon-lg)] [width:var(--size-icon-lg)] rounded [border-width:2px] bg-gray-100 [padding:0.25rem] dark:bg-gray-800 ${
             copied
               ? 'border-green-400 focus:border-green-400 focus:outline-none'
               : 'border-gray-300 dark:border-gray-600'

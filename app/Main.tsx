@@ -76,7 +76,7 @@ export default function Home({
   return (
     <>
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
-        <div className="space-y-2 pt-6 pb-8 md:space-y-5">
+        <div className="space-y-2 [padding-block-end:var(--spacing-section-bottom)] [padding-block-start:var(--spacing-section-top)] md:space-y-5">
           <h1 className="text-3xl leading-9 font-extrabold tracking-tight text-gray-900 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14 dark:text-gray-100">
             Lockhoda Martin
           </h1>
@@ -84,7 +84,7 @@ export default function Home({
             {description}
             <Link
               href="/about"
-              className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400 ml-1 font-medium underline"
+              className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400 [margin-inline-start:0.25rem] font-medium underline"
             >
               Read more
             </Link>
@@ -96,10 +96,10 @@ export default function Home({
             const { slug, createdAt, title, summary, tags, heroImage } = post
             const imageUrl = getHeroImageUrl(heroImage)
             return (
-              <li key={slug} className="py-12">
+              <li key={slug} className="[padding-block:var(--spacing-footer-y)]">
                 <article>
                   <div className="space-y-2 xl:grid xl:grid-cols-4 xl:items-stretch xl:space-y-0">
-                    <div className="pr-4">
+                    <div className="[padding-inline-end:1rem]">
                       <div className="relative aspect-4/3 w-full overflow-hidden xl:aspect-auto xl:h-full">
                         {imageUrl ? (
                           <Image
@@ -145,7 +145,7 @@ export default function Home({
                         </time>
                         <Link
                           href={`/blog/${slug}`}
-                          className="group text-primary-500 hover:text-primary-600 dark:hover:text-primary-400 mr-8 inline-flex items-center gap-2"
+                          className="group text-primary-500 hover:text-primary-600 dark:hover:text-primary-400 [margin-inline-end:var(--spacing-section-bottom)] inline-flex items-center [gap:0.5rem]"
                           aria-label={`Read more: "${title}"`}
                         >
                           <span>Read more</span>

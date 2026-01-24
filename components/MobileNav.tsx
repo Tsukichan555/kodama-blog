@@ -34,7 +34,7 @@ const MobileNav = () => {
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
           fill="currentColor"
-          className="hover:text-primary-500 dark:hover:text-primary-400 h-8 w-8 text-gray-900 dark:text-gray-100"
+          className="hover:text-primary-500 dark:hover:text-primary-400 [height:var(--size-icon-lg)] [width:var(--size-icon-lg)] text-gray-900 dark:text-gray-100"
         >
           <path
             fillRule="evenodd"
@@ -55,7 +55,7 @@ const MobileNav = () => {
             leaveTo="opacity-0"
             unmount={false}
           >
-            <div className="fixed inset-0 z-60 bg-black/25" />
+            <div className="fixed inset-0 [z-index:var(--z-60)] bg-black/25" />
           </TransitionChild>
 
           <TransitionChild
@@ -68,16 +68,16 @@ const MobileNav = () => {
             leaveTo="translate-x-full opacity-0"
             unmount={false}
           >
-            <DialogPanel className="fixed top-0 left-0 z-70 h-full w-full bg-white/95 duration-300 dark:bg-gray-950/98">
+            <DialogPanel className="fixed top-0 left-0 [z-index:var(--z-70)] h-full w-full bg-white/95 duration-300 dark:bg-gray-950/98">
               <nav
                 ref={navRef}
-                className="mt-8 flex h-full basis-0 flex-col items-start overflow-y-auto pt-2 pl-12 text-left"
+                className="mt-8 flex h-full basis-0 flex-col items-start overflow-y-auto [padding-inline-start:var(--spacing-mobile-nav-left)] text-left [padding-block-start:0.5rem]"
               >
                 {headerNavLinks.map((link) => (
                   <Link
                     key={link.title}
                     href={link.href}
-                    className="hover:text-primary-500 dark:hover:text-primary-400 mb-4 py-2 pr-4 text-2xl font-bold tracking-widest text-gray-900 outline outline-0 dark:text-gray-100"
+                    className="hover:text-primary-500 dark:hover:text-primary-400 [padding-block:0.5rem] [padding-inline-end:1rem] text-2xl font-bold tracking-widest text-gray-900 outline outline-0 [margin-block-end:1rem] dark:text-gray-100"
                     onClick={onToggleNav}
                   >
                     {link.title}
@@ -85,16 +85,16 @@ const MobileNav = () => {
                 ))}
                 <Link
                   href="mailto:&#x6C;&#x6F;&#x63;&#x6B;&#x68;&#x6F;&#x64;&#x61;&#x2E;&#x6D;&#x61;&#x72;&#x74;&#x69;&#x6E;&#x40;&#x67;&#x6D;&#x61;&#x69;&#x6C;&#x2E;&#x63;&#x6F;&#x6D;"
-                  className="hover:text-primary-500 dark:hover:text-primary-400 mb-4 flex flex-row items-center gap-2 py-2 pr-4 text-2xl font-bold tracking-widest text-gray-900 outline outline-0 dark:text-gray-100"
+                  className="hover:text-primary-500 dark:hover:text-primary-400 flex flex-row items-center [gap:0.5rem] [padding-block:0.5rem] [padding-inline-end:1rem] text-2xl font-bold tracking-widest text-gray-900 outline outline-0 [margin-block-end:1rem] dark:text-gray-100"
                   onClick={onToggleNav}
                 >
                   <span>Contact</span>
-                  <ExternalLink className="h-5 w-5" />
+                  <ExternalLink className="[height:var(--size-icon-sm)] [width:var(--size-icon-sm)]" />
                 </Link>
               </nav>
 
               <button
-                className="hover:text-primary-500 dark:hover:text-primary-400 fixed top-7 right-4 z-80 h-16 w-16 p-4 text-gray-900 dark:text-gray-100"
+                className="hover:text-primary-500 dark:hover:text-primary-400 fixed [top:1.75rem] [right:1rem] [z-index:var(--z-80)] [height:var(--size-icon-2xl)] [width:var(--size-icon-2xl)] [padding:1rem] text-gray-900 dark:text-gray-100"
                 aria-label="Toggle Menu"
                 onClick={onToggleNav}
               >
