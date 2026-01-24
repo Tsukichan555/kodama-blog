@@ -2,7 +2,7 @@ import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
 import { toHtml } from 'hast-util-to-html'
 import { toString } from 'hast-util-to-string'
 import { visit } from 'unist-util-visit'
-import type { ElementContent, Element } from 'hast'
+import type { ElementContent, Element, Parent } from 'hast'
 import { refractor } from 'refractor/lib/core.js'
 
 import arduino from 'refractor/lang/arduino.js'
@@ -174,11 +174,12 @@ export const highlightMicroCMSHtml = (html: string): string => {
     // Remove inline script tags from embeds (they will be loaded by MicroCMSEmbedEnhancer)
     // This prevents duplicate script loading and potential conflicts
     // Collect indices to remove in reverse order to avoid index shifting issues
-    const scriptsToRemove: Array<{ parent: Element; index: number }> = []
+    const scriptsToRemove: Array<{ parent: Parent; index: number }> = []
 
     visit(tree, 'element', (node, index, parent) => {
       if (node.tagName !== 'script') return
       if (!parent || typeof index !== 'number') return
+      if (parent.type !== 'element' && parent.type !== 'root') return
 
       const src = node.properties?.src
       if (
@@ -191,8 +192,10 @@ export const highlightMicroCMSHtml = (html: string): string => {
 
     // Remove scripts in reverse order to maintain correct indices
     scriptsToRemove.reverse().forEach(({ parent, index }) => {
-      parent.children.splice(index, 1)
-      updated = true
+      if ('children' in parent && Array.isArray(parent.children)) {
+        parent.children.splice(index, 1)
+        updated = true
+      }
     })
 
     return updated ? toHtml(tree) : html
