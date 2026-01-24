@@ -59,20 +59,12 @@ export default function MicroCMSEmbedEnhancer() {
     }
 
     // YouTube IFrame API
-    // Note: YouTube embeds typically work with just iframe tags and don't require
+    // Note: YouTube embeds work out of the box with iframe tags and don't require
     // additional script loading for basic functionality
-    const checkYouTubeEmbeds = () => {
-      const youtubeEmbeds = document.querySelectorAll('iframe[src*="youtube.com"]')
-      if (youtubeEmbeds.length > 0) {
-        // YouTube iframes work out of the box, no additional processing needed
-        // This function is here for future enhancements if needed
-      }
-    }
 
     // Execute all embed handlers
     loadTwitterScript()
     loadInstagramScript()
-    checkYouTubeEmbeds()
   }, [])
 
   return null
