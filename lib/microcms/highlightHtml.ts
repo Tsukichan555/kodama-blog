@@ -118,12 +118,11 @@ export const highlightMicroCMSHtml = (html: string): string => {
   if (!html) return html
 
   try {
-    // Early return if no code blocks and no embeds
+    // Early return if no code blocks
     const hasCodeBlocks = html.includes('<code')
-    const hasEmbedScripts = html.includes('<script')
-    const hasIframes = html.includes('iframe')
 
-    if (!hasCodeBlocks && !hasEmbedScripts && !hasIframes) {
+    if (!hasCodeBlocks) {
+      // No code blocks to highlight, return HTML as-is to preserve all attributes
       return html
     }
 
@@ -131,49 +130,46 @@ export const highlightMicroCMSHtml = (html: string): string => {
     let updated = false
 
     // Process code blocks for syntax highlighting
-    if (hasCodeBlocks) {
-      visit(tree, 'element', (node, _index, parent) => {
-        if (node.tagName !== 'code') return
-        if (!parent || parent.type !== 'element' || parent.tagName !== 'pre') return
+    visit(tree, 'element', (node, _index, parent) => {
+      if (node.tagName !== 'code') return
+      if (!parent || parent.type !== 'element' || parent.tagName !== 'pre') return
 
-        const properties = node.properties || {}
-        let language =
-          getLanguageFromClassName(properties.className) ||
-          getLanguageFromClassName(parent.properties?.className) ||
-          defaultLanguage
+      const properties = node.properties || {}
+      let language =
+        getLanguageFromClassName(properties.className) ||
+        getLanguageFromClassName(parent.properties?.className) ||
+        defaultLanguage
 
-        // Arduino code should use cpp for better tokenization
-        if (language === 'arduino') {
-          language = 'cpp'
+      // Arduino code should use cpp for better tokenization
+      if (language === 'arduino') {
+        language = 'cpp'
+      }
+
+      if (!language || !refractor.registered(language)) return
+
+      const code = toString(node)
+      if (!code) return
+
+      try {
+        const highlighted = refractor.highlight(code, language)
+        if (!highlighted.children || highlighted.children.length === 0) return
+        node.children = normalizeHighlightedNodes(highlighted.children as ElementContent[])
+        node.properties = properties
+        ensureLanguageClass(properties, language)
+        if (parent.properties) {
+          ensureLanguageClass(parent.properties, language)
+        } else {
+          parent.properties = {}
+          ensureLanguageClass(parent.properties, language)
         }
+        updated = true
+      } catch {
+        return
+      }
+    })
 
-        if (!language || !refractor.registered(language)) return
-
-        const code = toString(node)
-        if (!code) return
-
-        try {
-          const highlighted = refractor.highlight(code, language)
-          if (!highlighted.children || highlighted.children.length === 0) return
-          node.children = normalizeHighlightedNodes(highlighted.children as ElementContent[])
-          node.properties = properties
-          ensureLanguageClass(properties, language)
-          if (parent.properties) {
-            ensureLanguageClass(parent.properties, language)
-          } else {
-            parent.properties = {}
-            ensureLanguageClass(parent.properties, language)
-          }
-          updated = true
-        } catch {
-          return
-        }
-      })
-    }
-
-    // Note: We no longer remove script tags from embeds
-    // They need to be present inline for proper rendering
-    // However, we ensure each script is only loaded once globally
+    // Note: Inline scripts from MicroCMS embeds are preserved
+    // They are needed for proper rendering of Twitter/Instagram embeds
 
     return updated ? toHtml(tree) : html
   } catch {
