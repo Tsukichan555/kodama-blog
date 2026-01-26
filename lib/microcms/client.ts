@@ -1,5 +1,7 @@
 import 'server-only'
 
+import { buildMicroCMSPath, type MicroCMSRequest } from './endpoints'
+
 const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN
 const apiKey = process.env.MICROCMS_API_KEY
 
@@ -28,4 +30,11 @@ export async function fetchFromMicroCMS<T>(endpoint: string, init?: RequestInit)
   }
 
   return (await response.json()) as T
+}
+
+export async function fetchFromMicroCMSRequest<T>(
+  request: MicroCMSRequest,
+  init?: RequestInit
+): Promise<T> {
+  return fetchFromMicroCMS<T>(buildMicroCMSPath(request.path, request.params), init)
 }

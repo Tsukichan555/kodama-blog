@@ -4,7 +4,8 @@ import { cache } from 'react'
 import { allCoreContent, coreContent, sortPosts, type CoreContent } from 'pliny/utils/contentlayer'
 import { allBlogs, allAuthors, type Blog, type Authors } from 'contentlayer/generated'
 
-import { fetchFromMicroCMS, isMicroCMSEnabled } from './microcms/client'
+import { fetchFromMicroCMSRequest, isMicroCMSEnabled } from './microcms/client'
+import { microcmsEndpoints } from './microcms/endpoints'
 import { projectEntrypointsSubscribe } from 'next/dist/build/swc/generated-native'
 import { highlightMicroCMSHtml } from './microcms/highlightHtml'
 
@@ -135,8 +136,8 @@ const mapContentlayerToListItem = (entry: CoreContent<Blog>): BlogListItem => {
 export const getAllPosts = cache(async (): Promise<BlogListItem[]> => {
   if (isMicroCMSEnabled()) {
     try {
-      const response = await fetchFromMicroCMS<MicroCMSListResponse<MicroCMSBlogEntry>>(
-        'blog?limit=100&orders=-publishedAt'
+      const response = await fetchFromMicroCMSRequest<MicroCMSListResponse<MicroCMSBlogEntry>>(
+        microcmsEndpoints.listBlogs({ limit: 100, orders: '-publishedAt' })
       )
       return response.contents.map(mapMicroCMSToListItem)
     } catch (error) {
@@ -160,7 +161,9 @@ export const getTagCounts = (posts: BlogListItem[]): Record<string, number> => {
 export const getPostBySlug = cache(async (slug: string): Promise<PostDetailResult | null> => {
   if (isMicroCMSEnabled()) {
     try {
-      const entry = await fetchFromMicroCMS<MicroCMSBlogEntry>(`blog/${slug}`)
+      const entry = await fetchFromMicroCMSRequest<MicroCMSBlogEntry>(
+        microcmsEndpoints.blogDetail(slug)
+      )
       return {
         source: 'microcms',
         post: {
@@ -197,8 +200,9 @@ export const getPostBySlug = cache(async (slug: string): Promise<PostDetailResul
 export const getAboutContent = cache(async (): Promise<AboutContentResult> => {
   if (isMicroCMSEnabled()) {
     try {
-      const response =
-        await fetchFromMicroCMS<MicroCMSListResponse<MicroCMSAboutEntry>>('about?limit=1')
+      const response = await fetchFromMicroCMSRequest<MicroCMSListResponse<MicroCMSAboutEntry>>(
+        microcmsEndpoints.about({ limit: 1 })
+      )
       const entry = response.contents[0]
       if (entry?.aboutme) {
         return { source: 'microcms' as const, contentHtml: highlightMicroCMSHtml(entry.aboutme) }
@@ -234,7 +238,9 @@ export const getDraftPost = async (params: MicroCMSDraftParams): Promise<DraftPr
   if (!isMicroCMSEnabled()) throw new Error('microCMS disabled')
 
   try {
-    const entry = await fetchFromMicroCMS<MicroCMSBlogEntry>(`blog/${id}?draftKey=${draftKey}`)
+    const entry = await fetchFromMicroCMSRequest<MicroCMSBlogEntry>(
+      microcmsEndpoints.blogDraft(id, draftKey)
+    )
     const post: MicroCMSBlogDetail = {
       ...mapMicroCMSToListItem(entry),
       contentHtml: highlightMicroCMSHtml(entry.maincontent || ''),

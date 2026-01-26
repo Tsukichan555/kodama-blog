@@ -37,6 +37,19 @@ pnpm run serve   # 本番サーバ起動
 pnpm run lint    # Lint
 ```
 
+- start: next devで開発サーバ起動。
+- dev: cross-env INIT_CWD=$PWDを付けて開発サーバ起動。
+- build: next build後にpostbuild.mjs実行（JSON modules有効化）。
+- serve: next startで本番サーバ起動。
+- analyze: ANALYZE=trueでビルドしバンドル解析。
+- lint: 対象ディレクトリにnext lint --fix。
+- prepare: huskyセットアップ。
+
+git commit時のeslintは、Huskyのpre-commitフックからlint-stagedが走り、lint-staged設定でeslint --fixが実行されています。
+
+- package.json
+- .husky/pre-commit
+
 ## ページ構成(App Router)
 
 - ルート: `app/page.tsx`
