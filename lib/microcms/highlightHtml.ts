@@ -184,7 +184,10 @@ export const highlightMicroCMSHtml = (html: string): string => {
       const src = node.properties?.src
       if (
         typeof src === 'string' &&
-        (src.includes('platform.twitter.com/widgets.js') || src.includes('instagram.com/embed.js'))
+        (src.includes('platform.twitter.com/widgets.js') ||
+          src.includes('instagram.com/embed.js') ||
+          src.includes('//www.instagram.com/embed.js') ||
+          src.includes('//platform.twitter.com/widgets.js'))
       ) {
         scriptsToRemove.push({ parent, index })
       }
