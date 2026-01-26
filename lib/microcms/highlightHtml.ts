@@ -171,35 +171,9 @@ export const highlightMicroCMSHtml = (html: string): string => {
       })
     }
 
-    // Remove inline script tags from embeds (they will be loaded by MicroCMSEmbedEnhancer)
-    // This prevents duplicate script loading and potential conflicts
-    // Collect indices to remove in reverse order to avoid index shifting issues
-    const scriptsToRemove: Array<{ parent: Parent; index: number }> = []
-
-    visit(tree, 'element', (node, index, parent) => {
-      if (node.tagName !== 'script') return
-      if (!parent || typeof index !== 'number') return
-      if (parent.type !== 'element' && parent.type !== 'root') return
-
-      const src = node.properties?.src
-      if (
-        typeof src === 'string' &&
-        (src.includes('platform.twitter.com/widgets.js') ||
-          src.includes('instagram.com/embed.js') ||
-          src.includes('//www.instagram.com/embed.js') ||
-          src.includes('//platform.twitter.com/widgets.js'))
-      ) {
-        scriptsToRemove.push({ parent, index })
-      }
-    })
-
-    // Remove scripts in reverse order to maintain correct indices
-    scriptsToRemove.reverse().forEach(({ parent, index }) => {
-      if ('children' in parent && Array.isArray(parent.children)) {
-        parent.children.splice(index, 1)
-        updated = true
-      }
-    })
+    // Note: We no longer remove script tags from embeds
+    // They need to be present inline for proper rendering
+    // However, we ensure each script is only loaded once globally
 
     return updated ? toHtml(tree) : html
   } catch {
