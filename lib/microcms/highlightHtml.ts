@@ -2,7 +2,7 @@ import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
 import { toHtml } from 'hast-util-to-html'
 import { toString } from 'hast-util-to-string'
 import { visit } from 'unist-util-visit'
-import type { ElementContent } from 'hast'
+import type { ElementContent, Element, Parent } from 'hast'
 import { refractor } from 'refractor/lib/core.js'
 
 import arduino from 'refractor/lang/arduino.js'
@@ -115,12 +115,21 @@ const normalizeHighlightedNodes = (nodes: ElementContent[]): ElementContent[] =>
   })
 
 export const highlightMicroCMSHtml = (html: string): string => {
-  if (!html || !html.includes('<code')) return html
+  if (!html) return html
 
   try {
+    // Early return if no code blocks
+    const hasCodeBlocks = html.includes('<code')
+
+    if (!hasCodeBlocks) {
+      // No code blocks to highlight, return HTML as-is to preserve all attributes
+      return html
+    }
+
     const tree = fromHtmlIsomorphic(html, { fragment: true })
     let updated = false
 
+    // Process code blocks for syntax highlighting
     visit(tree, 'element', (node, _index, parent) => {
       if (node.tagName !== 'code') return
       if (!parent || parent.type !== 'element' || parent.tagName !== 'pre') return
@@ -158,6 +167,9 @@ export const highlightMicroCMSHtml = (html: string): string => {
         return
       }
     })
+
+    // Note: Inline scripts from MicroCMS embeds are preserved
+    // They are needed for proper rendering of Twitter/Instagram embeds
 
     return updated ? toHtml(tree) : html
   } catch {
