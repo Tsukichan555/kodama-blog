@@ -1,6 +1,6 @@
 import Link from '@/components/Link'
 import SectionContainer from '@/components/SectionContainer'
-import Tag from '@/components/Tag'
+import ProjectLink from '@/components/ProjectLink'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 //import Comments from '@/components/Comments'
 import Image from '@/components/Image'
@@ -29,7 +29,7 @@ interface MicroCMSPostLayoutProps {
 }
 
 export default function MicroCMSPostLayout({ post, prev, next }: MicroCMSPostLayoutProps) {
-  const { slug, title, tags, createdAt, revisedAt, contentHtml, heroImage } = post
+  const { slug, title, projects, createdAt, revisedAt, contentHtml, heroImage } = post
 
   return (
     <SectionContainer>
@@ -93,14 +93,14 @@ export default function MicroCMSPostLayout({ post, prev, next }: MicroCMSPostLay
               )}
             </div>
             <aside className="xl:col-start-4 xl:row-span-2 xl:pt-10">
-              {tags.length > 0 && (
+              {projects.length > 0 && (
                 <div className="pb-6">
                   <h2 className="text-xs tracking-wide text-gray-500 uppercase dark:text-gray-400">
                     Projects
                   </h2>
                   <div className="flex flex-wrap pt-2">
-                    {tags.map((tag) => (
-                      <Tag key={tag} text={tag} />
+                    {projects.map((project) => (
+                      <ProjectLink key={project} text={project} />
                     ))}
                   </div>
                 </div>

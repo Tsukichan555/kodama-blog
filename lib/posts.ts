@@ -25,9 +25,9 @@ interface MicroCMSMedia {
 interface MicroCMSBlogEntry {
   id: string
   title: string
-  tags: string
+  projects: string
   maincontent: string
-  pic?: MicroCMSMedia
+  thumbnail?: MicroCMSMedia
   publishedAt?: string
   revisedAt?: string
   overwrotePublishedAt?: string
@@ -48,7 +48,7 @@ export interface BlogListItem {
   slug: string
   title: string
   summary: string
-  tags: string[]
+  projects: string[]
   date: string
   createdAt: string
   revisedAt?: string
@@ -96,10 +96,10 @@ const logMicroCMSFallback = (message: string, error: unknown) => {
   console.warn(message, error)
 }
 
-const parseTags = (value: string) =>
+const parseProjects = (value: string) =>
   value
     .split('/')
-    .map((tag) => tag.trim())
+    .map((project) => project.trim())
     .filter(Boolean)
 
 const mapMicroCMSToListItem = (entry: MicroCMSBlogEntry): BlogListItem => {
@@ -110,11 +110,11 @@ const mapMicroCMSToListItem = (entry: MicroCMSBlogEntry): BlogListItem => {
     slug: entry.id,
     title: entry.title,
     summary: buildSummary(entry.maincontent || ''),
-    tags: parseTags(entry.tags || ''),
+    projects: parseProjects(entry.projects || ''),
     date: createdAt,
     createdAt,
     revisedAt,
-    heroImage: entry.pic || null,
+    heroImage: entry.thumbnail || null,
   }
 }
 
@@ -125,7 +125,7 @@ const mapContentlayerToListItem = (entry: CoreContent<Blog>): BlogListItem => {
     slug: entry.slug,
     title: entry.title,
     summary: entry.summary || '',
-    tags: entry.tags || [],
+    projects: entry.projects || [],
     date: createdAt,
     createdAt,
     revisedAt,
@@ -149,10 +149,10 @@ export const getAllPosts = cache(async (): Promise<BlogListItem[]> => {
   return posts.map(mapContentlayerToListItem)
 })
 
-export const getTagCounts = (posts: BlogListItem[]): Record<string, number> => {
+export const getProjectCounts = (posts: BlogListItem[]): Record<string, number> => {
   return posts.reduce<Record<string, number>>((acc, post) => {
-    post.tags.forEach((tag) => {
-      acc[tag] = (acc[tag] || 0) + 1
+    post.projects.forEach((project) => {
+      acc[project] = (acc[project] || 0) + 1
     })
     return acc
   }, {})
@@ -169,7 +169,7 @@ export const getPostBySlug = cache(async (slug: string): Promise<PostDetailResul
         post: {
           ...mapMicroCMSToListItem(entry),
           contentHtml: highlightMicroCMSHtml(entry.maincontent || ''),
-          heroImage: entry.pic || null,
+          heroImage: entry.thumbnail || null,
         },
       }
     } catch (error) {
@@ -244,7 +244,7 @@ export const getDraftPost = async (params: MicroCMSDraftParams): Promise<DraftPr
     const post: MicroCMSBlogDetail = {
       ...mapMicroCMSToListItem(entry),
       contentHtml: highlightMicroCMSHtml(entry.maincontent || ''),
-      heroImage: entry.pic || null,
+      heroImage: entry.thumbnail || null,
     }
     return {
       source: 'microcms',

@@ -1,5 +1,5 @@
 import Link from '@/components/Link'
-import Tag from '@/components/Tag'
+import ProjectLink from '@/components/ProjectLink'
 import siteMetadata from '@/data/siteMetadata'
 import { type AboutContentResult, type BlogListItem } from '@/lib/posts'
 import Image from '@/components/Image'
@@ -93,7 +93,7 @@ export default function Home({
         <ul className="divide-y divide-gray-200 dark:divide-gray-700">
           {!posts.length && 'No posts found.'}
           {posts.slice(0, MAX_DISPLAY).map((post) => {
-            const { slug, createdAt, title, summary, tags, heroImage } = post
+            const { slug, createdAt, title, summary, projects, heroImage } = post
             const imageUrl = getHeroImageUrl(heroImage)
             return (
               <li key={slug} className="py-12">
@@ -130,8 +130,8 @@ export default function Home({
                             </Link>
                           </h2>
                           <div className="flex flex-wrap">
-                            {tags.map((tag) => (
-                              <Tag key={tag} text={tag} />
+                            {projects.map((project) => (
+                              <ProjectLink key={project} text={project} />
                             ))}
                           </div>
                         </div>

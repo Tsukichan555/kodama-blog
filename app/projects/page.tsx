@@ -1,8 +1,8 @@
 import Link from '@/components/Link'
-import Tag from '@/components/Tag'
+import ProjectLink from '@/components/ProjectLink'
 import { slug } from 'github-slugger'
 import { genPageMetadata } from 'app/seo'
-import { getAllPosts, getTagCounts } from '@/lib/posts'
+import { getAllPosts, getProjectCounts } from '@/lib/posts'
 
 export const metadata = genPageMetadata({
   title: 'Projects',
@@ -12,9 +12,9 @@ export const metadata = genPageMetadata({
 
 export default async function Page() {
   const posts = await getAllPosts()
-  const tagCounts = getTagCounts(posts)
-  const tagKeys = Object.keys(tagCounts)
-  const sortedTags = tagKeys.sort((a, b) => tagCounts[b] - tagCounts[a])
+  const projectCounts = getProjectCounts(posts)
+  const projectKeys = Object.keys(projectCounts)
+  const sortedProjects = projectKeys.sort((a, b) => projectCounts[b] - projectCounts[a])
   return (
     <>
       <div className="flex flex-col items-start justify-start divide-y divide-gray-200 md:mt-24 md:flex-row md:items-center md:justify-center md:space-x-6 md:divide-y-0 dark:divide-gray-700">
@@ -24,17 +24,17 @@ export default async function Page() {
           </h1>
         </div>
         <div className="flex max-w-lg flex-wrap">
-          {tagKeys.length === 0 && 'No projects found.'}
-          {sortedTags.map((t) => {
+          {projectKeys.length === 0 && 'No projects found.'}
+          {sortedProjects.map((project) => {
             return (
-              <div key={t} className="mt-2 mr-5 mb-2">
-                <Tag text={t} />
+              <div key={project} className="mt-2 mr-5 mb-2">
+                <ProjectLink text={project} />
                 <Link
-                  href={`/projects/${slug(t)}`}
+                  href={`/projects/${slug(project)}`}
                   className="-ml-2 text-sm font-semibold text-gray-600 uppercase dark:text-gray-300"
-                  aria-label={`View posts tagged ${t}`}
+                  aria-label={`View posts in project ${project}`}
                 >
-                  {` (${tagCounts[t]})`}
+                  {` (${projectCounts[project]})`}
                 </Link>
               </div>
             )

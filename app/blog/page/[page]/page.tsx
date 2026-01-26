@@ -1,7 +1,7 @@
 import { genPageMetadata } from 'app/seo'
-import ListLayout from '@/layouts/ListLayoutWithTags'
+import ListLayout from '@/layouts/ListLayoutWithProjects'
 import { notFound } from 'next/navigation'
-import { getAllPosts, getTagCounts } from '@/lib/posts'
+import { getAllPosts, getProjectCounts } from '@/lib/posts'
 
 const POSTS_PER_PAGE = 5
 
@@ -50,7 +50,7 @@ export default async function Page(props: { params: Promise<{ page: string }> })
       initialDisplayPosts={initialDisplayPosts}
       pagination={pagination}
       title="All Posts"
-      tagCounts={getTagCounts(posts)}
+      projectCounts={getProjectCounts(posts)}
     />
   )
 }

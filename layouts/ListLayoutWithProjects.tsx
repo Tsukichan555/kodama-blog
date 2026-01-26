@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation'
 import { slug } from 'github-slugger'
 import Link from '@/components/Link'
-import Tag from '@/components/Tag'
+import ProjectLink from '@/components/ProjectLink'
 import { type BlogListItem } from '@/lib/posts'
 import Image from '@/components/Image'
 
@@ -37,7 +37,7 @@ interface ListLayoutProps {
   title: string
   initialDisplayPosts?: BlogListItem[]
   pagination?: PaginationProps
-  tagCounts?: Record<string, number>
+  projectCounts?: Record<string, number>
 }
 
 function Pagination({ totalPages, currentPage }: PaginationProps) {
@@ -85,24 +85,26 @@ function Pagination({ totalPages, currentPage }: PaginationProps) {
   )
 }
 
-export default function ListLayoutWithTags({
+export default function ListLayoutWithProjects({
   posts,
   title,
   initialDisplayPosts = [],
   pagination,
-  tagCounts,
+  projectCounts,
 }: ListLayoutProps) {
   const pathname = usePathname()
-  const providedTagCounts =
-    tagCounts ||
+  const providedProjectCounts =
+    projectCounts ||
     posts.reduce<Record<string, number>>((acc, post) => {
-      post.tags.forEach((tag) => {
-        acc[tag] = (acc[tag] || 0) + 1
+      post.projects.forEach((project) => {
+        acc[project] = (acc[project] || 0) + 1
       })
       return acc
     }, {})
-  const tagKeys = Object.keys(providedTagCounts)
-  const sortedTags = tagKeys.sort((a, b) => providedTagCounts[b] - providedTagCounts[a])
+  const projectKeys = Object.keys(providedProjectCounts)
+  const sortedProjects = projectKeys.sort(
+    (a, b) => providedProjectCounts[b] - providedProjectCounts[a]
+  )
 
   const displayPosts = initialDisplayPosts.length > 0 ? initialDisplayPosts : posts
 
@@ -128,21 +130,21 @@ export default function ListLayoutWithTags({
                 </Link>
               )}
               <ul>
-                {sortedTags.map((t) => {
-                  const count = providedTagCounts[t]
+                {sortedProjects.map((project) => {
+                  const count = providedProjectCounts[project]
                   return (
-                    <li key={t} className="my-3">
-                      {decodeURI(pathname.split('/projects/')[1] || '') === slug(t) ? (
+                    <li key={project} className="my-3">
+                      {decodeURI(pathname.split('/projects/')[1] || '') === slug(project) ? (
                         <h3 className="text-primary-500 inline px-3 py-2 text-sm font-bold uppercase">
-                          {`${t} (${count})`}
+                          {`${project} (${count})`}
                         </h3>
                       ) : (
                         <Link
-                          href={`/projects/${slug(t)}`}
+                          href={`/projects/${slug(project)}`}
                           className="hover:text-primary-500 dark:hover:text-primary-500 px-3 py-2 text-sm font-medium text-gray-500 uppercase dark:text-gray-300"
-                          aria-label={`View posts tagged ${t}`}
+                          aria-label={`View posts in project ${project}`}
                         >
-                          {`${t} (${count})`}
+                          {`${project} (${count})`}
                         </Link>
                       )}
                     </li>
@@ -159,7 +161,7 @@ export default function ListLayoutWithTags({
                   createdAt,
                   title: postTitle,
                   summary,
-                  tags,
+                  projects,
                   heroImage,
                 } = post
                 const imageUrl = getHeroImageUrl(heroImage)
@@ -193,8 +195,8 @@ export default function ListLayoutWithTags({
                             </Link>
                           </h2>
                           <div className="flex flex-wrap">
-                            {tags?.map((tag) => (
-                              <Tag key={tag} text={tag} />
+                            {projects?.map((project) => (
+                              <ProjectLink key={project} text={project} />
                             ))}
                           </div>
                         </div>

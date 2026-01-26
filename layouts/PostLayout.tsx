@@ -6,7 +6,7 @@ import Link from '@/components/Link'
 import PageTitle from '@/components/PageTitle'
 import SectionContainer from '@/components/SectionContainer'
 import Image from '@/components/Image'
-import Tag from '@/components/Tag'
+import ProjectLink from '@/components/ProjectLink'
 import siteMetadata from '@/data/siteMetadata'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 import AirplaneIcon from '@/components/AirplaneIcon'
@@ -35,7 +35,7 @@ interface LayoutProps {
 }
 
 export default function PostLayout({ content, authorDetails, next, prev, children }: LayoutProps) {
-  const { filePath, path, slug, date, lastmod, title, tags } = content
+  const { filePath, path, slug, date, lastmod, title, projects } = content
   const createdAt = date
   const revisedAt = lastmod || date
   const showUpdatedAt = Boolean(lastmod)
@@ -131,14 +131,14 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
             </div>
             <footer>
               <div className="divide-gray-200 text-sm leading-5 font-medium xl:col-start-1 xl:row-start-2 xl:divide-y dark:divide-gray-700">
-                {tags && (
+                {projects && (
                   <div className="py-4 xl:py-8">
                     <h2 className="text-xs tracking-wide text-gray-500 uppercase dark:text-gray-400">
                       Projects
                     </h2>
                     <div className="flex flex-wrap">
-                      {tags.map((tag) => (
-                        <Tag key={tag} text={tag} />
+                      {projects.map((project) => (
+                        <ProjectLink key={project} text={project} />
                       ))}
                     </div>
                   </div>

@@ -1,6 +1,6 @@
 import { genPageMetadata } from 'app/seo'
-import ListLayout from '@/layouts/ListLayoutWithTags'
-import { getAllPosts, getTagCounts } from '@/lib/posts'
+import ListLayout from '@/layouts/ListLayoutWithProjects'
+import { getAllPosts, getProjectCounts } from '@/lib/posts'
 
 const POSTS_PER_PAGE = 5
 
@@ -22,7 +22,7 @@ export default async function BlogPage() {
       initialDisplayPosts={initialDisplayPosts}
       pagination={pagination}
       title="All Posts"
-      tagCounts={getTagCounts(posts)}
+      projectCounts={getProjectCounts(posts)}
     />
   )
 }

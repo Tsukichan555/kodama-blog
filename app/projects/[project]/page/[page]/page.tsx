@@ -1,9 +1,9 @@
 import siteMetadata from '@/data/siteMetadata'
 import { slug } from 'github-slugger'
-import ListLayout from '@/layouts/ListLayoutWithTags'
+import ListLayout from '@/layouts/ListLayoutWithProjects'
 import { notFound } from 'next/navigation'
 import { buildCanonicalUrl, genPageMetadata } from 'app/seo'
-import { getAllPosts, getTagCounts } from '@/lib/posts'
+import { getAllPosts, getProjectCounts } from '@/lib/posts'
 
 const POSTS_PER_PAGE = 5
 
@@ -11,19 +11,21 @@ export async function generateMetadata(props: {
   params: Promise<{ project: string; page: string }>
 }) {
   const params = await props.params
-  const tag = decodeURI(params.project)
-  const tagSlug = slug(tag)
+  const project = decodeURI(params.project)
+  const projectSlug = slug(project)
   const pageNumber = parseInt(params.page)
   const isFirstPage = pageNumber === 1
-  const path = isFirstPage ? `/projects/${tagSlug}` : `/projects/${tagSlug}/page/${pageNumber}`
+  const path = isFirstPage
+    ? `/projects/${projectSlug}`
+    : `/projects/${projectSlug}/page/${pageNumber}`
 
   return genPageMetadata({
-    title: isFirstPage ? tag : `${tag} - Page ${pageNumber}`,
-    description: `${siteMetadata.title} ${tag} tagged content`,
+    title: isFirstPage ? project : `${project} - Page ${pageNumber}`,
+    description: `${siteMetadata.title} ${project} project content`,
     path,
     alternates: {
       types: {
-        'application/rss+xml': buildCanonicalUrl(`/projects/${tagSlug}/feed.xml`),
+        'application/rss+xml': buildCanonicalUrl(`/projects/${projectSlug}/feed.xml`),
       },
     },
   })
@@ -31,27 +33,27 @@ export async function generateMetadata(props: {
 
 export const generateStaticParams = async () => {
   const posts = await getAllPosts()
-  const tagCounts = getTagCounts(posts)
-  return Object.keys(tagCounts).flatMap((tag) => {
-    const postCount = tagCounts[tag]
+  const projectCounts = getProjectCounts(posts)
+  return Object.keys(projectCounts).flatMap((project) => {
+    const postCount = projectCounts[project]
     const totalPages = Math.max(1, Math.ceil(postCount / POSTS_PER_PAGE))
     return Array.from({ length: totalPages }, (_, i) => ({
-      project: encodeURI(tag),
+      project: encodeURI(project),
       page: (i + 1).toString(),
     }))
   })
 }
 
-export default async function TagPage(props: {
+export default async function ProjectPage(props: {
   params: Promise<{ project: string; page: string }>
 }) {
   const params = await props.params
-  const tag = decodeURI(params.project)
-  const title = tag[0].toUpperCase() + tag.split(' ').join('-').slice(1)
+  const project = decodeURI(params.project)
+  const title = project[0].toUpperCase() + project.split(' ').join('-').slice(1)
   const pageNumber = parseInt(params.page)
   const posts = await getAllPosts()
-  const filteredPosts = posts.filter(
-    (post) => post.tags && post.tags.map((t) => slug(t)).includes(tag)
+  const filteredPosts = posts.filter((post) =>
+    post.projects?.map((projectName) => slug(projectName)).includes(project)
   )
   const totalPages = Math.max(1, Math.ceil(filteredPosts.length / POSTS_PER_PAGE))
 
@@ -74,7 +76,7 @@ export default async function TagPage(props: {
       initialDisplayPosts={initialDisplayPosts}
       pagination={pagination}
       title={title}
-      tagCounts={getTagCounts(posts)}
+      projectCounts={getProjectCounts(posts)}
     />
   )
 }
