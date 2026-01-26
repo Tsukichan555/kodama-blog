@@ -20,21 +20,21 @@ Next.js(App Router) + Tailwind CSS + Contentlayer を使ったブログプロジ
 2. 依存関係の導入
 
 ```bash
-npm install
+pnpm install
 ```
 
 3. 開発サーバ起動
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 その他のコマンド:
 
 ```bash
-npm run build   # 本番ビルド
-npm run serve   # 本番サーバ起動
-npm run lint    # Lint
+pnpm run build   # 本番ビルド
+pnpm run serve   # 本番サーバ起動
+pnpm run lint    # Lint
 ```
 
 ## ページ構成(App Router)
