@@ -26,7 +26,7 @@ interface MicroCMSBlogEntry {
   title: string
   tags: string
   maincontent: string
-  pic?: MicroCMSMedia
+  thumbnail?: MicroCMSMedia
   publishedAt?: string
   revisedAt?: string
   overwrotePublishedAt?: string
@@ -113,7 +113,7 @@ const mapMicroCMSToListItem = (entry: MicroCMSBlogEntry): BlogListItem => {
     date: createdAt,
     createdAt,
     revisedAt,
-    heroImage: entry.pic || null,
+    heroImage: entry.thumbnail || null,
   }
 }
 
@@ -166,7 +166,7 @@ export const getPostBySlug = cache(async (slug: string): Promise<PostDetailResul
         post: {
           ...mapMicroCMSToListItem(entry),
           contentHtml: highlightMicroCMSHtml(entry.maincontent || ''),
-          heroImage: entry.pic || null,
+          heroImage: entry.thumbnail || null,
         },
       }
     } catch (error) {
@@ -238,7 +238,7 @@ export const getDraftPost = async (params: MicroCMSDraftParams): Promise<DraftPr
     const post: MicroCMSBlogDetail = {
       ...mapMicroCMSToListItem(entry),
       contentHtml: highlightMicroCMSHtml(entry.maincontent || ''),
-      heroImage: entry.pic || null,
+      heroImage: entry.thumbnail || null,
     }
     return {
       source: 'microcms',
