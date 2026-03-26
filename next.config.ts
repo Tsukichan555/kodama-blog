@@ -9,7 +9,7 @@ const withBundleAnalyzer = bundleAnalyzer({
 // You might need to insert additional domains in script-src if you are using external services
 const ContentSecurityPolicy = `
   default-src 'self';
-  script-src 'self' 'unsafe-eval' 'unsafe-inline' giscus.app analytics.umami.is cdn.iframe.ly;
+  script-src 'self' 'unsafe-eval' 'unsafe-inline' giscus.app analytics.umami.is cdn.iframe.ly https://platform.twitter.com https://*.twitter.com https://x.com https://*.x.com https://www.instagram.com;
   style-src 'self' 'unsafe-inline';
   img-src * blob: data:;
   media-src *.s3.amazonaws.com;

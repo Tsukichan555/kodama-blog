@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import Script from 'next/script'
 
 import { detectEmbedProviders, stripExternalScripts } from '@/lib/microcms/embedContent'
@@ -17,7 +17,7 @@ declare global {
     }
     twttr?: {
       widgets?: {
-        load: () => void
+        load: (element?: HTMLElement) => void
       }
     }
   }
@@ -31,8 +31,8 @@ const loadInstagramEmbeds = () => {
   window.instgrm?.Embeds?.process?.()
 }
 
-const loadTwitterEmbeds = () => {
-  window.twttr?.widgets?.load?.()
+const loadTwitterEmbeds = (container?: HTMLElement | null) => {
+  window.twttr?.widgets?.load?.(container ?? undefined)
 }
 
 const loadIframelyEmbeds = () => {
@@ -40,6 +40,7 @@ const loadIframelyEmbeds = () => {
 }
 
 export default function EmbedContent({ html }: EmbedContentProps) {
+  const containerRef = useRef<HTMLDivElement>(null)
   const embedProviders = detectEmbedProviders(html)
   const sanitizedHtml = stripExternalScripts(html)
 
@@ -48,7 +49,7 @@ export default function EmbedContent({ html }: EmbedContentProps) {
       loadInstagramEmbeds()
     }
     if (embedProviders.twitter) {
-      loadTwitterEmbeds()
+      loadTwitterEmbeds(containerRef.current)
     }
     if (embedProviders.iframely) {
       loadIframelyEmbeds()
@@ -70,7 +71,7 @@ export default function EmbedContent({ html }: EmbedContentProps) {
           id="twitter-embed-script"
           src="https://platform.twitter.com/widgets.js"
           strategy="afterInteractive"
-          onLoad={loadTwitterEmbeds}
+          onLoad={() => loadTwitterEmbeds(containerRef.current)}
         />
       ) : null}
       {embedProviders.iframely ? (
@@ -82,6 +83,7 @@ export default function EmbedContent({ html }: EmbedContentProps) {
         />
       ) : null}
       <div
+        ref={containerRef}
         className="prose dark:prose-invert max-w-none pt-10 pb-8"
         dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
       />

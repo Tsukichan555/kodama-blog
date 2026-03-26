@@ -12,11 +12,11 @@ interface EmbedProviderDefinition {
 const EMBED_PROVIDER_DEFINITIONS: EmbedProviderDefinition[] = [
   {
     key: 'instagram',
-    patterns: ['instagram-media', 'www.instagram.com'],
+    patterns: ['instagram-media', 'www.instagram.com', 'instagram.com'],
   },
   {
     key: 'twitter',
-    patterns: ['twitter-tweet', 'platform.twitter.com'],
+    patterns: ['twitter-tweet', 'platform.twitter.com', 'twitter.com', 'x.com'],
   },
   {
     key: 'iframely',
