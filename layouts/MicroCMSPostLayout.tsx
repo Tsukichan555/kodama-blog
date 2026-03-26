@@ -9,6 +9,7 @@ import AirplaneIcon from '@/components/AirplaneIcon'
 import siteMetadata from '@/data/siteMetadata'
 import Comments from '@/components/Comments'
 import MicroCMSCodeEnhancer from '@/components/MicroCMSCodeEnhancer'
+import IframelyContent from '@/components/IframelyContent'
 
 const formatDateYYMMDD = (value: string) => {
   const date = new Date(value)
@@ -74,10 +75,7 @@ export default function MicroCMSPostLayout({ post, prev, next }: MicroCMSPostLay
           <div className="divide-y divide-gray-200 pb-8 xl:grid xl:grid-cols-4 xl:gap-x-6 xl:divide-y-0 dark:divide-gray-700">
             <div className="xl:col-span-3 xl:row-span-2">
               {contentHtml && contentHtml.trim() ? (
-                <div
-                  className="prose dark:prose-invert max-w-none pt-10 pb-8"
-                  dangerouslySetInnerHTML={{ __html: contentHtml }}
-                />
+                <IframelyContent html={contentHtml} />
               ) : (
                 <div className="prose dark:prose-invert max-w-none pt-10 pb-8" />
               )}
