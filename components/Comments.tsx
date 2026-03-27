@@ -1,11 +1,22 @@
 'use client'
 
 import { Comments as CommentsComponent } from 'pliny/comments'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import siteMetadata from '@/data/siteMetadata'
+import { Spinner } from '@/components/ui/spinner'
 
 export default function Comments({ slug }: { slug: string }) {
   const [loadComments, setLoadComments] = useState(false)
+
+  useEffect(() => {
+    if (document.readyState === 'complete') {
+      setLoadComments(true)
+    } else {
+      const handleLoad = () => setLoadComments(true)
+      window.addEventListener('load', handleLoad)
+      return () => window.removeEventListener('load', handleLoad)
+    }
+  }, [])
 
   if (!siteMetadata.comments?.provider) {
     return null
@@ -15,12 +26,14 @@ export default function Comments({ slug }: { slug: string }) {
       {loadComments ? (
         <CommentsComponent commentsConfig={siteMetadata.comments} slug={slug} />
       ) : (
-        <button
-          onClick={() => setLoadComments(true)}
-          className="focus:shadow-outline-orange inline rounded-lg border border-transparent bg-orange-600 px-4 py-2 text-sm leading-5 font-medium text-white shadow-xs transition-colors duration-150 hover:bg-orange-700 focus:outline-hidden dark:hover:bg-orange-500"
+        <div
+          className="flex items-center gap-2 text-gray-500 dark:text-gray-400"
+          aria-live="polite"
+          aria-label="コメントを読み込み中"
         >
-          Load Comments
-        </button>
+          <Spinner size={20} />
+          <span>コメントを読み込み中</span>
+        </div>
       )}
     </>
   )
