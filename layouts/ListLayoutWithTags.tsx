@@ -114,9 +114,9 @@ export default function ListLayoutWithTags({
             {title}
           </h1>
         </div>
-        <div className="flex sm:space-x-24">
-          <div className="hidden h-full max-h-screen max-w-[280px] min-w-[280px] flex-wrap overflow-auto rounded-sm bg-gray-50 pt-5 shadow-md sm:flex dark:bg-gray-900/70 dark:shadow-gray-800/40">
-            <div className="px-6 py-4">
+        <div className="flex flex-col lg:flex-row lg:items-start lg:space-x-24">
+          <div className="hidden rounded-sm bg-gray-50 pt-5 shadow-md md:flex md:h-auto md:max-h-none md:w-full md:flex-wrap md:overflow-visible lg:inline-flex lg:h-fit lg:max-h-screen lg:min-h-auto lg:w-auto lg:max-w-[280px] lg:min-w-[280px] lg:flex-col lg:flex-nowrap lg:self-start lg:overflow-auto dark:bg-gray-900/70 dark:shadow-gray-800/40">
+            <div className="px-6 py-4 md:flex md:flex-wrap md:items-center md:gap-x-2 lg:flex lg:flex-col lg:items-start lg:gap-x-0">
               {pathname.startsWith('/blog') ? (
                 <h3 className="text-primary-500 font-bold uppercase">All Posts</h3>
               ) : (
@@ -127,11 +127,11 @@ export default function ListLayoutWithTags({
                   All Posts
                 </Link>
               )}
-              <ul>
+              <ul className="md:flex md:flex-wrap md:items-center lg:block">
                 {sortedTags.map((t) => {
                   const count = providedTagCounts[t]
                   return (
-                    <li key={t} className="my-3">
+                    <li key={t} className="my-3 md:my-0 lg:my-3">
                       {decodeURI(pathname.split('/projects/')[1] || '') === slug(t) ? (
                         <h3 className="text-primary-500 inline px-3 py-2 text-sm font-bold uppercase">
                           {`${t} (${count})`}
