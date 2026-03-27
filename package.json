@@ -20,7 +20,6 @@
     "@tailwindcss/typography": "^0.5.15",
     "@vercel/og": "^0.8.6",
     "body-scroll-lock": "^4.0.0-beta.0",
-    "clsx": "^2.1.1",
     "contentlayer2": "0.5.5",
     "esbuild": "0.25.2",
     "github-slugger": "^2.0.0",
@@ -48,7 +47,6 @@
     "remark-gfm": "^4.0.0",
     "remark-github-blockquote-alert": "^1.2.1",
     "remark-math": "^6.0.0",
-    "tailwind-merge": "^3.5.0",
     "tailwindcss": "^4.0.5",
     "unist-util-visit": "^5.0.0"
   },
