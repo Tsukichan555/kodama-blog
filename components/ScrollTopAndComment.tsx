@@ -1,7 +1,7 @@
 'use client'
 
 import siteMetadata from '@/data/siteMetadata'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Drawer } from 'vaul'
 import { Share } from 'lucide-react'
 import { X, Facebook, Threads, Line } from '@/components/social-icons/icons'
@@ -12,19 +12,8 @@ interface Props {
 }
 
 const ScrollTopAndComment = ({ shareUrl, shareTitle }: Props) => {
-  const [show, setShow] = useState(false)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [copied, setCopied] = useState<'idle' | 'success' | 'error'>('idle')
-
-  useEffect(() => {
-    const handleWindowScroll = () => {
-      if (window.scrollY > 50) setShow(true)
-      else setShow(false)
-    }
-
-    window.addEventListener('scroll', handleWindowScroll)
-    return () => window.removeEventListener('scroll', handleWindowScroll)
-  }, [])
 
   const handleScrollTop = () => {
     window.scrollTo({ top: 0 })
@@ -76,11 +65,7 @@ const ScrollTopAndComment = ({ shareUrl, shareTitle }: Props) => {
 
   return (
     <>
-      <div
-        className={`fixed right-4 bottom-6 z-30 flex flex-col gap-3 transition-opacity duration-300 md:right-8 md:bottom-8 ${
-          show ? 'opacity-100' : 'pointer-events-none opacity-0'
-        }`}
-      >
+      <div className="fixed right-4 bottom-6 z-30 flex flex-col gap-3 md:right-8 md:bottom-8">
         {siteMetadata.comments?.provider && (
           <button
             aria-label="Scroll To Comment"
