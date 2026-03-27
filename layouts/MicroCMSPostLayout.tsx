@@ -35,7 +35,7 @@ export default function MicroCMSPostLayout({ post, prev, next }: MicroCMSPostLay
   return (
     <SectionContainer>
       <MicroCMSCodeEnhancer />
-      <ScrollTopAndComment />
+      <ScrollTopAndComment shareUrl={`${siteMetadata.siteUrl}/blog/${slug}`} shareTitle={title} />
       <article>
         <div className="xl:divide-y xl:divide-gray-200 xl:dark:divide-gray-700">
           <header className="pt-6 xl:pb-6">

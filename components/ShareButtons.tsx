@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { X, Facebook, Linkedin } from '@/components/social-icons/icons'
+import { X, Facebook, Threads, Line } from '@/components/social-icons/icons'
 
 interface ShareButtonsProps {
   url: string
@@ -9,17 +9,23 @@ interface ShareButtonsProps {
 }
 
 export default function ShareButtons({ url, title }: ShareButtonsProps) {
-  const [copied, setCopied] = useState(false)
+  const [copied, setCopied] = useState<'idle' | 'success' | 'error'>('idle')
 
   const encodedUrl = encodeURIComponent(url)
   const encodedTitle = encodeURIComponent(title)
 
   const shareLinks = [
     {
-      label: 'X (Twitter)',
+      label: 'X',
       href: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`,
       Icon: X,
       color: 'hover:text-black dark:hover:text-white',
+    },
+    {
+      label: 'LINE',
+      href: `https://social-plugins.line.me/lineit/share?url=${encodedUrl}`,
+      Icon: Line,
+      color: 'hover:text-[#06C755]',
     },
     {
       label: 'Facebook',
@@ -28,20 +34,21 @@ export default function ShareButtons({ url, title }: ShareButtonsProps) {
       color: 'hover:text-[#1877F2]',
     },
     {
-      label: 'LinkedIn',
-      href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
-      Icon: Linkedin,
-      color: 'hover:text-[#0A66C2]',
+      label: 'Threads',
+      href: `https://www.threads.net/intent/post?text=${encodedTitle}%20${encodedUrl}`,
+      Icon: Threads,
+      color: 'hover:text-black dark:hover:text-white',
     },
   ]
 
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(url)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
+      setCopied('success')
     } catch {
-      // fallback: do nothing
+      setCopied('error')
+    } finally {
+      setTimeout(() => setCopied('idle'), 2000)
     }
   }
 
@@ -81,7 +88,11 @@ export default function ShareButtons({ url, title }: ShareButtonsProps) {
           <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
           <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
         </svg>
-        {copied ? 'コピーしました！' : 'リンクをコピー'}
+        {copied === 'success'
+          ? 'コピーしました！'
+          : copied === 'error'
+            ? 'コピーに失敗しました'
+            : 'リンクをコピー'}
       </button>
     </div>
   )
