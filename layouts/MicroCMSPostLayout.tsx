@@ -10,7 +10,6 @@ import siteMetadata from '@/data/siteMetadata'
 import Comments from '@/components/Comments'
 import MicroCMSCodeEnhancer from '@/components/MicroCMSCodeEnhancer'
 import EmbedContent from '@/components/EmbedContent'
-import ShareButtons from '@/components/ShareButtons'
 
 const formatDateYYMMDD = (value: string) => {
   const date = new Date(value)
@@ -80,9 +79,6 @@ export default function MicroCMSPostLayout({ post, prev, next }: MicroCMSPostLay
               ) : (
                 <div className="prose dark:prose-invert max-w-none pt-10 pb-8" />
               )}
-              <div className="pt-6 pb-2 text-sm text-gray-700 dark:text-gray-300">
-                <ShareButtons url={`${siteMetadata.siteUrl}/blog/${slug}`} title={title} />
-              </div>
               {siteMetadata.comments && (
                 <div
                   className="pt-6 pb-6 text-center text-gray-700 dark:text-gray-300"
