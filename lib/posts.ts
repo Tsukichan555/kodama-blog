@@ -24,7 +24,7 @@ interface MicroCMSMedia {
 interface MicroCMSBlogEntry {
   id: string
   title: string
-  tags: string
+  projects: string
   maincontent: string
   thumbnail?: MicroCMSMedia
   publishedAt?: string
@@ -109,7 +109,7 @@ const mapMicroCMSToListItem = (entry: MicroCMSBlogEntry): BlogListItem => {
     slug: entry.id,
     title: entry.title,
     summary: buildSummary(entry.maincontent || ''),
-    tags: parseTags(entry.tags || ''),
+    tags: parseTags(entry.projects || ''),
     date: createdAt,
     createdAt,
     revisedAt,
