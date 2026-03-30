@@ -10,6 +10,7 @@ import siteMetadata from '@/data/siteMetadata'
 import Comments from '@/components/Comments'
 import MicroCMSCodeEnhancer from '@/components/MicroCMSCodeEnhancer'
 import EmbedContent from '@/components/EmbedContent'
+import LikeButton from '@/components/LikeButton'
 
 const formatDateYYMMDD = (value: string) => {
   const date = new Date(value)
@@ -29,7 +30,7 @@ interface MicroCMSPostLayoutProps {
 }
 
 export default function MicroCMSPostLayout({ post, prev, next }: MicroCMSPostLayoutProps) {
-  const { slug, title, tags, createdAt, revisedAt, contentHtml, heroImage } = post
+  const { slug, title, tags, createdAt, revisedAt, contentHtml, heroImage, likeCount } = post
 
   return (
     <SectionContainer>
@@ -79,6 +80,9 @@ export default function MicroCMSPostLayout({ post, prev, next }: MicroCMSPostLay
               ) : (
                 <div className="prose dark:prose-invert max-w-none pt-10 pb-8" />
               )}
+              <div className="flex justify-center pt-8 pb-2">
+                <LikeButton articleId={slug} initialCount={likeCount ?? 0} />
+              </div>
               {siteMetadata.comments && (
                 <div
                   className="pt-6 pb-6 text-center text-gray-700 dark:text-gray-300"

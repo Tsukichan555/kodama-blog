@@ -32,6 +32,7 @@ interface MicroCMSBlogEntry {
   overwrotePublishedAt?: string
   createdAt: string
   updatedAt: string
+  likeCount?: number
 }
 
 interface MicroCMSAboutEntry {
@@ -52,6 +53,7 @@ export interface BlogListItem {
   createdAt: string
   revisedAt?: string
   heroImage?: MicroCMSMedia | string | null
+  likeCount?: number
 }
 
 export interface MicroCMSBlogDetail extends BlogListItem {
@@ -114,6 +116,7 @@ const mapMicroCMSToListItem = (entry: MicroCMSBlogEntry): BlogListItem => {
     createdAt,
     revisedAt,
     heroImage: entry.thumbnail || null,
+    likeCount: entry.likeCount ?? 0,
   }
 }
 
