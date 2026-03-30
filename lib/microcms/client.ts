@@ -29,3 +29,26 @@ export async function fetchFromMicroCMS<T>(endpoint: string, init?: RequestInit)
 
   return (await response.json()) as T
 }
+
+export async function patchMicroCMS<T extends Record<string, unknown>>(
+  endpoint: string,
+  body: T
+): Promise<void> {
+  if (!isMicroCMSEnabled()) {
+    throw new Error('MicroCMS environment variables are not configured.')
+  }
+
+  const response = await fetch(`${baseUrl}/${endpoint}`, {
+    method: 'PATCH',
+    headers: {
+      'X-MICROCMS-API-KEY': apiKey as string,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  })
+
+  if (!response.ok) {
+    const errorBody = await response.text()
+    throw new Error(`Failed to patch microCMS: ${response.status} ${errorBody}`)
+  }
+}
